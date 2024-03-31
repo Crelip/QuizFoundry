@@ -1,0 +1,88 @@
+import React, { useState } from 'react';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import SearchIcon from '@mui/icons-material/Search';
+import AddIcon from '@mui/icons-material/Add';
+import { createTheme } from '@mui/material';
+import { green } from '@mui/material/colors';
+import { ThemeProvider } from '@emotion/react';
+
+export default function Navbar() {
+  const [isSearchClicked, setIsSearchClicked] = useState(false);
+
+  const handleSearchClick = () => {
+    setIsSearchClicked(true);
+  };
+
+  const theme = createTheme({
+    palette:{
+        primary:{
+            main: green[200],
+        },
+        secondary:{
+            main: green[500],
+        },
+    },
+  });
+
+  return (
+    <div>
+        <ThemeProvider theme={theme}>
+        <AppBar position="static">
+            <Toolbar sx={{ display: 'flex',
+            justifyContent: 'space-between'
+            }}>
+            {isSearchClicked ? (
+                <TextField
+                size="tiny"
+                placeholder="Search"
+                sx={{ mr: 1, display: 'flex', alignItems: 'center' }}
+                variant='filled'
+                />
+            ) : (
+                <IconButton
+                size="large"
+                variant='contained'
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                onClick={handleSearchClick}
+                >
+                <SearchIcon />
+                </IconButton>
+            )}
+
+            <Typography
+                variant="h6"
+                component="div"
+                sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                flexGrow: 1,
+                }}
+            >
+                QuizFoundry
+            </Typography>
+
+            <div>
+                <Button variant='contained' color="inherit" sx={{ display: { xs: 'none', sm: 'block' } }}>
+                Create a new quiz
+                </Button>
+                <IconButton
+                    variant='contained'
+                color="inherit"
+                sx={{ display: { xs: 'block', sm: 'none' } }}
+                >
+                <AddIcon />
+                </IconButton>
+            </div>
+            </Toolbar>
+        </AppBar>
+        </ThemeProvider>
+    </div>
+  );
+}
