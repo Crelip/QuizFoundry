@@ -43,12 +43,17 @@ const App = () => {
     const handleAddQuestion = (newQuestion) => {
         setQuestions([...questions, newQuestion]);
     };
+    const handleDeleteQuestion = (questionId) => {
+        setQuestions(prevQuestions => {
+            return prevQuestions.filter((question) => question.id !== questionId);
+          });
+      };
 
   return (
     <div>
       <Navbar />
       <Container>
-        <QuizCreation questions={questions} onAddQuestion={handleAddQuestion}/>
+        <QuizCreation questions={questions} onAddQuestion={handleAddQuestion} onDeleteQuestion={handleDeleteQuestion}/>
       </Container>
     </div>
   );

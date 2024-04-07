@@ -18,7 +18,7 @@ import { Add as AddIcon, Delete as DeleteIcon } from '@mui/icons-material';
 //Questions and quiz are for now a variable, in the future they will be accesssed through an API.
 //let quiz = {id: 0, name: "Sample Quiz", owner: 0, firstQuestion: 0};
 
-const QuizCreation = ({ questions, onAddQuestion }) => {
+const QuizCreation = ({ questions, onAddQuestion, onDeleteQuestion }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [newQuestion, setNewQuestion] = useState('');
   const [newAnswers, setNewAnswers] = useState(['']);
@@ -57,6 +57,10 @@ const QuizCreation = ({ questions, onAddQuestion }) => {
     setNewAnswers(updatedAnswers);
   };
 
+  const handleRemoveQuestion = (id) => {
+    onDeleteQuestion(id);
+  };
+
   return (
     <div>
       <Typography variant="h5">Quiz Creation</Typography>
@@ -65,7 +69,7 @@ const QuizCreation = ({ questions, onAddQuestion }) => {
           <ListItem key={question.id}>
             <ListItemText primary={question.questionText} />
             <ListItemSecondaryAction>
-              <IconButton edge="end" aria-label="delete">
+              <IconButton onClick={() => handleRemoveQuestion(question.id)} edge="end" aria-label="delete">
                 <DeleteIcon />
               </IconButton>
             </ListItemSecondaryAction>
