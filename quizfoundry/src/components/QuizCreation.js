@@ -12,6 +12,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Box
 } from '@mui/material';
 import { Add as AddIcon, Delete as DeleteIcon } from '@mui/icons-material';
 
@@ -55,6 +56,22 @@ const QuizCreation = ({ questions, onAddQuestion, onDeleteQuestion }) => {
     const updatedAnswers = [...newAnswers];
     updatedAnswers[index] = event.target.value;
     setNewAnswers(updatedAnswers);
+  };
+
+  const handleAddCorrectAnswer = () => {
+    setNewCorrectAnswers([...newCorrectAnswers, ''])
+  }
+
+  const handleCorrectAnswerChange = (index, event) => {
+    const updatedCorrectAnswers = [...newCorrectAnswers];
+    updatedCorrectAnswers[index] = event.target.value;
+    setNewCorrectAnswers(updatedCorrectAnswers);
+  }
+
+  const handleRemoveCorrectAnswer = (index) => {
+    const updatedCorrectAnswers = [...newCorrectAnswers];
+    updatedCorrectAnswers.splice(index, 1);
+    setNewCorrectAnswers(updatedCorrectAnswers);
   };
 
   const handleRemoveQuestion = (id) => {
@@ -114,6 +131,28 @@ const QuizCreation = ({ questions, onAddQuestion, onDeleteQuestion }) => {
           <Button color="primary" onClick={handleAddAnswer}>
             Add Answer
           </Button>
+          <Box sx={{color: 'text.secondary', fontSize: 8}}>Don't add answers if you don't want this to be a choice question</Box>
+
+          {newCorrectAnswers.map((correctAnswer, index) => (
+            <div key={index}>
+              <TextField
+                margin="normal"
+                label={`Correct Answer ${index + 1}`}
+                fullWidth
+                value={correctAnswer}
+                onChange={(e) => handleCorrectAnswerChange(index, e)}
+              />
+              {index > 0 && (
+                <IconButton onClick={() => handleRemoveCorrectAnswer(index)}>
+                  <DeleteIcon />
+                </IconButton>
+              )}
+            </div>
+          ))}
+          <Button color="primary" onClick={handleAddCorrectAnswer}>
+            Add A Correct Answer
+          </Button>
+
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setIsDialogOpen(false)}>Cancel</Button>
