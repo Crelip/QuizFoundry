@@ -1,48 +1,125 @@
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
+import React, { useState } from 'react';
+import {
+  Button,
+  TextField,
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemSecondaryAction,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from '@mui/material';
+import { Add as AddIcon, Delete as DeleteIcon } from '@mui/icons-material';
 
-export default function QuizCreation(){
-    //Questions and quizare for now a variable, in the future they will be accesssed through an API.
-    let quiz = {id: 0, name: "Sample Quiz", owner: 0, firstQuestion: 0};
-    let questions = [{id: 0,
-        questionText: "Z akej krajiny pochadza mandarinka Darinka?",
-        isChoice: true,
-        choiceAnswers: ["Grecko", "Spanielsko", "Estonsko", "Portugalsko"],
-        correctAnswers: ["Grecko"],
-        dynamicNext: true,
-        nextQuestion: function(answer) {
-            return answer === "Grecko" ? 1 : 2;
-        }
-    },
-    {  
-        id: 1,
-        questionText: "Kolko dni a noci stravila mandarinka Darinka v tranzite?",
-        isChoice: false,
-        correctAnswers: ["20"],
-        nextQuestion: 3
-    },
-    {
-        id: 2,
-        questionText: "Kto sa zalubil do mandarinky Darinky?",
-        isChoice: false,
-        correctAnswers: ["Jeden pomaranc", "Ovocie"],
-        nextQuestion: 3
-    },
-    {
-        id: 3,
-        questionText: "O com vedel cely strom?",
-        isChoice: true,
-        choiceAnswers: ["Ze uz je na svadbu cas", "Ze paraziti napadli strom", "Ze strom niekto ide obrat"],
-        correctAnswers: ["Ze uz je na svadbu cas"],
-        dynamicNext: false,
-        nextQuestion: -1
-    }
-    ];
-    return(
-        <div>
-            <List>
+//Questions and quiz are for now a variable, in the future they will be accesssed through an API.
+//let quiz = {id: 0, name: "Sample Quiz", owner: 0, firstQuestion: 0};
 
-            </List>
-        </div>
-    );
-}
+const QuizCreation = ({ questions, onAddQuestion }) => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [newQuestion, setNewQuestion] = useState('');
+  const [newAnswers, setNewAnswers] = useState(['']);
+  const [newCorrectAnswers, setNewCorrectAnswers] = useState(['']);
+
+  //Creating a new question
+  const handleAddQuestion = () => {
+    onAddQuestion({
+      id: questions.length,
+      questionText: newQuestion,
+      isChoice: newAnswers.length > 1,
+      choiceAnswers: newAnswers,
+      correctAnswers: newCorrectAnswers,
+      dynamicNext: false,
+      nextQuestion: -1,
+    });
+    setIsDialogOpen(false);
+    setNewQuestion('');
+    setNewAnswers(['']);
+    setNewCorrectAnswers(['']);
+  };
+
+  const handleAddAnswer = () => {
+    setNewAnswers([...newAnswers, '']);
+  };
+
+  const handleRemoveAnswer = (index) => {
+    const updatedAnswers = [...newAnswers];
+    updatedAnswers.splice(index, 1);
+    setNewAnswers(updatedAnswers);
+  };
+
+  const handleAnswerChange = (index, event) => {
+    const updatedAnswers = [...newAnswers];
+    updatedAnswers[index] = event.target.value;
+    setNewAnswers(updatedAnswers);
+  };
+
+  return (
+    <div>
+      <Typography variant="h5">Quiz Creation</Typography>
+      <List>
+        {questions.map((question) => (
+          <ListItem key={question.id}>
+            <ListItemText primary={question.questionText} />
+            <ListItemSecondaryAction>
+              <IconButton edge="end" aria-label="delete">
+                <DeleteIcon />
+              </IconButton>
+            </ListItemSecondaryAction>
+          </ListItem>
+        ))}
+      </List>
+      <Button
+        variant="contained"
+        color="primary"
+        startIcon={<AddIcon />}
+        onClick={() => setIsDialogOpen(true)}
+      >
+        Add Question
+      </Button>
+
+      <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
+        <DialogTitle>Add New Question</DialogTitle>
+        <DialogContent>
+          <TextField
+            margin="normal"
+            label="Question Text"
+            fullWidth
+            value={newQuestion}
+            onChange={(e) => setNewQuestion(e.target.value)}
+          />
+          {newAnswers.map((answer, index) => (
+            <div key={index}>
+              <TextField
+                margin="normal"
+                label={`Answer ${index + 1}`}
+                fullWidth
+                value={answer}
+                onChange={(e) => handleAnswerChange(index, e)}
+              />
+              {index > 0 && (
+                <IconButton onClick={() => handleRemoveAnswer(index)}>
+                  <DeleteIcon />
+                </IconButton>
+              )}
+            </div>
+          ))}
+          <Button color="primary" onClick={handleAddAnswer}>
+            Add Answer
+          </Button>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setIsDialogOpen(false)}>Cancel</Button>
+          <Button onClick={handleAddQuestion} color="primary">
+            Add Question
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
+};
+
+export default QuizCreation;
