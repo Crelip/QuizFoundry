@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
 
 function QuizSolving({ questions }) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -51,10 +54,21 @@ function QuizSolving({ questions }) {
               </List>
             </div>
           ) : (
-            <form onSubmit={(e) => handleInputSubmit(e, currentQuestion)}>
-              <input type="text" name="answer" />
-              <button type="submit">Submit</button>
-            </form>
+            <Grid container component="form" onSubmit={(e) => handleInputSubmit(e, currentQuestion)} spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                type="text"
+                name="answer"
+                label="Answer"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Button type="submit" variant="contained" color="primary">
+                Submit
+              </Button>
+            </Grid>
+          </Grid>
           )}
         </div>
       )}
