@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
 
 function QuizSolving({ questions }) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -37,11 +40,15 @@ function QuizSolving({ questions }) {
           <p>{currentQuestion.questionText}</p>
           {currentQuestion.isChoice ? (
             <div>
-              {currentQuestion.choiceAnswers.map((choice, index) => (
-                <button key={index} onClick={() => handleAnswer(choice, currentQuestion)}>
-                  {choice}
-                </button>
-              ))}
+              <List component='div' aria-label='choices'>
+                {
+                  currentQuestion.choiceAnswers.map((choice, index) => (
+                    <ListItemButton key={index} onClick={() => handleAnswer(choice, currentQuestion)}>
+                      <ListItemText primary={choice} />
+                    </ListItemButton>
+                  ))
+                }
+              </List>
             </div>
           ) : (
             <form onSubmit={(e) => handleInputSubmit(e, currentQuestion)}>
