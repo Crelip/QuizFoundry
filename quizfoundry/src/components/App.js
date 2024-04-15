@@ -2,12 +2,18 @@ import React, {useState} from 'react';
 import { Container } from '@mui/material';
 import Navbar from './Navbar';
 import QuizCreation from './QuizCreation';
+import QuizSolving from './QuizSolving';
 
 const App = () => {
     const [showQuizCreation, setShowQuizCreation] = useState(false);
+    const [showQuizSolving, setShowQuizSolving] = useState(false);
 
     const startShowQuizCreation = () => {
         setShowQuizCreation(true);
+    }
+
+    const startShowQuizSolving = () => {
+        setShowQuizSolving(true);
     }
 
     const [questions, setQuestions] = useState([
@@ -57,9 +63,10 @@ const App = () => {
 
   return (
     <div>
-      <Navbar startQuizCreation={startShowQuizCreation} />
+      <Navbar startQuizCreation={startShowQuizCreation} startSampleQuiz={startShowQuizSolving}/>
       <Container>
         {showQuizCreation && <QuizCreation questions={questions} onAddQuestion={handleAddQuestion} onDeleteQuestion={handleDeleteQuestion}/>}
+        {showQuizSolving && <QuizSolving questions={questions}/>}
       </Container>
     </div>
   );
