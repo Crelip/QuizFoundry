@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import { ThemeProvider } from '@emotion/react';
+import _ from 'lodash';
 
 function QuizSolving({theme, questions }) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -14,8 +15,16 @@ function QuizSolving({theme, questions }) {
   const [correctAnswersAmount, setCorrectAnswersAmount] = useState(0);
 
   const handleAnswer = (answer, question) => {
+    answer = _.lowerCase(_.deburr(answer));
     setAnsweredQuestionsAmount(answeredQuestionsAmount + 1);
-    if(question.correctAnswers.includes(answer)) setCorrectAnswersAmount(correctAnswersAmount + 1);
+    const correctAnswersNormalised = question.correctAnswers.map(element => {
+      return _.lowerCase(_.deburr(element));
+    });
+    let ans = false;
+    if(correctAnswersNormalised.includes(answer)) {
+      setCorrectAnswersAmount(correctAnswersAmount + 1);
+      ans = true;
+    }
     const updatedUserAnswers = [...userAnswers, answer];
     setUserAnswers(updatedUserAnswers);
     const currentQuestion = questions[currentQuestionIndex];
@@ -25,30 +34,38 @@ function QuizSolving({theme, questions }) {
     } else {
       setCurrentQuestionIndex(currentQuestion.nextQuestion);
     }
+    return ans;
   };
 
   const handleInputSubmit = (e, question) => {
     e.preventDefault();
     const answer = e.target.answer.value;
-    handleAnswer(answer, question);
+    const ans = isCorrectAnswer(answer, question);
     e.target.reset();
+    return ans;
   };
 
+  let isCorrectAnswer = (choice, currentQuestion) => {
+    const isCorrect = handleAnswer(choice, currentQuestion);
+    console.log(isCorrect);
+  }
+
   const currentQuestion = questions[currentQuestionIndex];
+
 
   return (
     <div>
       <ThemeProvider theme={theme}>
       {currentQuestion && (
         <div>
-          <h2>Question {currentQuestion.id + 1}</h2>
+          <h2>Question {answeredQuestionsAmount + 1}</h2>
           <p>{currentQuestion.questionText}</p>
           {currentQuestion.isChoice ? (
             <div>
               <List component='div' aria-label='choices'>
                 {
                   currentQuestion.choiceAnswers.map((choice, index) => (
-                    <ListItemButton key={index} onClick={() => handleAnswer(choice, currentQuestion)}>
+                    <ListItemButton key={index} onClick={() => isCorrectAnswer(choice, currentQuestion)}>
                       <ListItemText primary={choice} />
                     </ListItemButton>
                   ))
