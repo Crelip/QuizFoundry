@@ -11,7 +11,7 @@ import { createTheme } from '@mui/material';
 import { green } from '@mui/material/colors';
 import { ThemeProvider } from '@emotion/react';
 
-export default function Navbar() {
+export default function Navbar({startQuizCreation}) {
   const [isSearchClicked, setIsSearchClicked] = useState(false);
 
   const handleSearchClick = () => {
@@ -69,7 +69,7 @@ export default function Navbar() {
             </Typography>
 
             <div>
-                <Button variant='contained' color="inherit" sx={{ display: { xs: 'none', sm: 'block' } }}>
+                <Button onClick={startQuizCreation} variant='contained' color="inherit" sx={{ display: { xs: 'none', sm: 'block' } }}>
                 Create a new quiz
                 </Button>
                 <IconButton

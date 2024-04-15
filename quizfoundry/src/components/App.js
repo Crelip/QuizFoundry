@@ -4,6 +4,12 @@ import Navbar from './Navbar';
 import QuizCreation from './QuizCreation';
 
 const App = () => {
+    const [showQuizCreation, setShowQuizCreation] = useState(false);
+
+    const startShowQuizCreation = () => {
+        setShowQuizCreation(true);
+    }
+
     const [questions, setQuestions] = useState([
         {id: 0,
             questionText: "Z akej krajiny pochadza mandarinka Darinka?",
@@ -51,9 +57,9 @@ const App = () => {
 
   return (
     <div>
-      <Navbar />
+      <Navbar startQuizCreation={startShowQuizCreation} />
       <Container>
-        <QuizCreation questions={questions} onAddQuestion={handleAddQuestion} onDeleteQuestion={handleDeleteQuestion}/>
+        {showQuizCreation && <QuizCreation questions={questions} onAddQuestion={handleAddQuestion} onDeleteQuestion={handleDeleteQuestion}/>}
       </Container>
     </div>
   );
