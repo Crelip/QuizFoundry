@@ -5,8 +5,9 @@ import ListItemText from '@mui/material/ListItemText';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
+import { ThemeProvider } from '@emotion/react';
 
-function QuizSolving({ questions }) {
+function QuizSolving({theme, questions }) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState([]);
   const [answeredQuestionsAmount, setAnsweredQuestionsAmount] = useState(0);
@@ -37,6 +38,7 @@ function QuizSolving({ questions }) {
 
   return (
     <div>
+      <ThemeProvider theme={theme}>
       {currentQuestion && (
         <div>
           <h2>Question {currentQuestion.id + 1}</h2>
@@ -78,6 +80,7 @@ function QuizSolving({ questions }) {
       <p>Success rate: {correctAnswersAmount / answeredQuestionsAmount * 100}%</p>
       </div>
       }
+      </ThemeProvider>
     </div>
   );
 }

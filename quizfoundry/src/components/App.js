@@ -3,6 +3,8 @@ import { Container } from '@mui/material';
 import Navbar from './Navbar';
 import QuizCreation from './QuizCreation';
 import QuizSolving from './QuizSolving';
+import { createTheme } from '@mui/material';
+import { green } from '@mui/material/colors';
 
 const App = () => {
     const [showQuizCreation, setShowQuizCreation] = useState(false);
@@ -15,6 +17,17 @@ const App = () => {
     const startShowQuizSolving = () => {
         setShowQuizSolving(true);
     }
+
+    const theme = createTheme({
+        palette:{
+            primary:{
+                main: green[400],
+            },
+            secondary:{
+                main: green[800],
+            },
+        },
+      });
 
     const [questions, setQuestions] = useState([
         {id: 0,
@@ -63,10 +76,10 @@ const App = () => {
 
   return (
     <div>
-      <Navbar startQuizCreation={startShowQuizCreation} startSampleQuiz={startShowQuizSolving}/>
+      <Navbar theme={theme} startQuizCreation={startShowQuizCreation} startSampleQuiz={startShowQuizSolving}/>
       <Container>
-        {showQuizCreation && <QuizCreation questions={questions} onAddQuestion={handleAddQuestion} onDeleteQuestion={handleDeleteQuestion}/>}
-        {showQuizSolving && <QuizSolving questions={questions}/>}
+        {showQuizCreation && <QuizCreation theme={theme} questions={questions} onAddQuestion={handleAddQuestion} onDeleteQuestion={handleDeleteQuestion}/>}
+        {showQuizSolving && <QuizSolving theme={theme} questions={questions}/>}
       </Container>
     </div>
   );

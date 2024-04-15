@@ -15,15 +15,17 @@ import {
   Box
 } from '@mui/material';
 import { Add as AddIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import { ThemeProvider } from '@emotion/react';
 
 //Questions and quiz are for now a variable, in the future they will be accesssed through an API.
 //let quiz = {id: 0, name: "Sample Quiz", owner: 0, firstQuestion: 0};
 
-const QuizCreation = ({ questions, onAddQuestion, onDeleteQuestion }) => {
+const QuizCreation = ( {theme, questions, onAddQuestion, onDeleteQuestion }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [newQuestion, setNewQuestion] = useState('');
   const [newAnswers, setNewAnswers] = useState(['']);
   const [newCorrectAnswers, setNewCorrectAnswers] = useState(['']);
+
 
   //Creating a new question
   const handleAddQuestion = () => {
@@ -80,6 +82,7 @@ const QuizCreation = ({ questions, onAddQuestion, onDeleteQuestion }) => {
 
   return (
     <div>
+      <ThemeProvider theme={theme}>
       <Typography variant="h5">Quiz Creation</Typography>
       <List>
         {questions.map((question) => (
@@ -161,6 +164,7 @@ const QuizCreation = ({ questions, onAddQuestion, onDeleteQuestion }) => {
           </Button>
         </DialogActions>
       </Dialog>
+      </ThemeProvider>
     </div>
   );
 };
