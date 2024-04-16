@@ -7,27 +7,14 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
-import { createTheme } from '@mui/material';
-import { green } from '@mui/material/colors';
 import { ThemeProvider } from '@emotion/react';
 
-export default function Navbar({startQuizCreation, startSampleQuiz}) {
+export default function Navbar({theme, startQuizCreation, startSampleQuiz}) {
   const [isSearchClicked, setIsSearchClicked] = useState(false);
 
   const handleSearchClick = () => {
     setIsSearchClicked(true);
   };
-
-  const theme = createTheme({
-    palette:{
-        primary:{
-            main: green[200],
-        },
-        secondary:{
-            main: green[500],
-        },
-    },
-  });
 
   return (
     <div>
