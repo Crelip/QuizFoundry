@@ -1,12 +1,21 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Container } from '@mui/material';
 import Navbar from './Navbar';
 import QuizCreation from './QuizCreation';
 import QuizSolving from './QuizSolving';
 import { createTheme } from '@mui/material';
 import { green } from '@mui/material/colors';
-
 const App = () => {
+
+    useEffect(() => {
+        fetch(process.env.REACT_APP_API_URL + 'user/')
+        .then(data => {
+            console.log(data.json());
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+  });
+    })
     const [showQuizCreation, setShowQuizCreation] = useState(false);
     const [showQuizSolving, setShowQuizSolving] = useState(false);
 
