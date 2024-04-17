@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
@@ -8,34 +8,125 @@ import TextField from '@mui/material/TextField';
 import { ThemeProvider } from '@emotion/react';
 import _ from 'lodash';
 
-function QuizSolving({theme, questions }) {
+function QuizSolving({theme, initialQuestion }) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState([]);
   const [answeredQuestionsAmount, setAnsweredQuestionsAmount] = useState(0);
   const [correctAnswersAmount, setCorrectAnswersAmount] = useState(0);
+  const [currentQuestion, setCurrentQuestion] = useState(null);
+  const [currentChoices, setCurrentChoices] = useState(null);
+
+  async function fetchQuestion(questionId) {
+    try {
+      const response = await fetch(process.env.REACT_APP_API_URL + 'question/' + questionId + '/');
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+    }
+  }
+
+  async function fetchCorrectAnswers(questionId){
+    try {
+      const response = await fetch(process.env.REACT_APP_API_URL + 'correct/' + questionId + '/');
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+    }
+  }
+
+  async function fetchNextQuestions(questionId){
+    try {
+      const response = await fetch(process.env.REACT_APP_API_URL + 'next/' + questionId + '/');
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+    }
+  }
+
+  async function fetchChoices(questionId){
+    try {
+      const response = await fetch(process.env.REACT_APP_API_URL + 'choices/' + questionId + '/');
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+    }
+  }
+
 
   const handleAnswer = (answer, question) => {
     answer = _.lowerCase(_.deburr(answer));
-    setAnsweredQuestionsAmount(answeredQuestionsAmount + 1);
-    const correctAnswersNormalised = question.correctAnswers.map(element => {
-      return _.lowerCase(_.deburr(element));
-    });
     let ans = false;
-    if(correctAnswersNormalised.includes(answer)) {
-      setCorrectAnswersAmount(correctAnswersAmount + 1);
-      ans = true;
-    }
-    const updatedUserAnswers = [...userAnswers, answer];
-    setUserAnswers(updatedUserAnswers);
-    const currentQuestion = questions[currentQuestionIndex];
-    if (currentQuestion.dynamicNext) {
-      const nextIndex = currentQuestion.nextQuestion(answer);
-      setCurrentQuestionIndex(nextIndex);
-    } else {
-      setCurrentQuestionIndex(currentQuestion.nextQuestion);
-    }
+    setAnsweredQuestionsAmount(answeredQuestionsAmount + 1);
+  
+    // Getting correct answers from API and checking the correctness
+    const correctAnswersPromise = fetchCorrectAnswers(question.id);
+    const nextQuestionPromise = fetchNextQuestions(question.id);
+  
+    // Wait for both promises to finish
+    Promise.all([correctAnswersPromise, nextQuestionPromise])
+      .then(([correctAnswers, nextQuestion]) => {
+        const correctAnswersNormalised = correctAnswers.map(element => {
+          console.log(element.correctAnswer);
+          return _.lowerCase(_.deburr(element.correctAnswer));
+        });
+  
+        if (correctAnswersNormalised.includes(answer)) {
+          setCorrectAnswersAmount(correctAnswersAmount + 1);
+          ans = true;
+        }
+  
+        const updatedUserAnswers = [...userAnswers, answer];
+        // Finding the next question (if no next question, it should be -1)
+        console.log(nextQuestion.length)
+        if(nextQuestion.length === 0){
+          setCurrentQuestionIndex(-1);
+          setCurrentQuestion(null);
+        }
+        else if (question.dynamicNext) {
+          changeQuestion(nextQuestion.find(choice => _.lowerCase(_.deburr(choice.answer)) === answer).nextQuestionID);
+        } 
+        else {
+          changeQuestion(nextQuestion[0].nextQuestionID);
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  
     return ans;
   };
+
+  const changeQuestion = (nextQuestionID) => {
+    fetchChoices(nextQuestionID)
+    .then((choices) => {
+      setCurrentChoices(choices.map(choice => choice.choiceAnswer));
+    });
+    fetchQuestion(nextQuestionID)
+    .then((nextQuestion) => {
+      setCurrentQuestionIndex(nextQuestion.nextQuestionID);
+      setCurrentQuestion(nextQuestion);
+    });
+  }
 
   const handleInputSubmit = (e, question) => {
     e.preventDefault();
@@ -50,8 +141,24 @@ function QuizSolving({theme, questions }) {
     console.log(isCorrect);
   }
 
-  const currentQuestion = questions[currentQuestionIndex];
+  useEffect(() => {
+    async function fetchInitialQuestion() {
+      try {
+        const data = await fetchQuestion(initialQuestion);
+        fetchChoices(initialQuestion)
+        .then((choices) => {
+          setCurrentChoices(choices.map(choice => choice.choiceAnswer));
+        });
+        setCurrentQuestion(data);
+      } catch (error) {
+        console.error('Error fetching initial question:', error);
+      }
+    }
 
+    if (!currentQuestion && answeredQuestionsAmount === 0) {
+      fetchInitialQuestion();
+    }
+  }, [initialQuestion, currentQuestion, answeredQuestionsAmount]);
 
   return (
     <div>
@@ -64,7 +171,8 @@ function QuizSolving({theme, questions }) {
             <div>
               <List component='div' aria-label='choices'>
                 {
-                  currentQuestion.choiceAnswers.map((choice, index) => (
+                  //List all of the choices
+                  currentChoices.map((choice, index) => (
                     <ListItemButton key={index} onClick={() => isCorrectAnswer(choice, currentQuestion)}>
                       <ListItemText primary={choice} />
                     </ListItemButton>
@@ -91,7 +199,8 @@ function QuizSolving({theme, questions }) {
           )}
         </div>
       )}
-      {!currentQuestion && <div><p>Quiz completed!</p>
+      {(!currentQuestion && answeredQuestionsAmount === 0) && <p>Loading...</p>}
+      {!currentQuestion && answeredQuestionsAmount !== 0 && <div><p>Quiz completed!</p>
       <p>Total questions answered: {answeredQuestionsAmount}</p>
       <p>Correct answers: {correctAnswersAmount}</p>
       <p>Success rate: {correctAnswersAmount / answeredQuestionsAmount * 100}%</p>

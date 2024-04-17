@@ -7,15 +7,6 @@ import { createTheme } from '@mui/material';
 import { green } from '@mui/material/colors';
 const App = () => {
 
-    useEffect(() => {
-        fetch(process.env.REACT_APP_API_URL + 'user/')
-        .then(data => {
-            console.log(data.json());
-        })
-        .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
-  });
-    })
     const [showQuizCreation, setShowQuizCreation] = useState(false);
     const [showQuizSolving, setShowQuizSolving] = useState(false);
 
@@ -88,7 +79,7 @@ const App = () => {
       <Navbar theme={theme} startQuizCreation={startShowQuizCreation} startSampleQuiz={startShowQuizSolving}/>
       <Container>
         {showQuizCreation && <QuizCreation theme={theme} questions={questions} onAddQuestion={handleAddQuestion} onDeleteQuestion={handleDeleteQuestion}/>}
-        {showQuizSolving && <QuizSolving theme={theme} questions={questions}/>}
+        {showQuizSolving && <QuizSolving theme={theme} initialQuestion={2}/>}
       </Container>
     </div>
   );
