@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {useParams} from 'react-router-dom';
 import { Container } from '@mui/material';
 import Navbar from './Navbar';
 import QuizCreation from './QuizCreation';
@@ -6,11 +7,10 @@ import QuizSolving from './QuizSolving';
 import { createTheme } from '@mui/material';
 import { green } from '@mui/material/colors';
 const App = () => {
-
+    let {quizID} = useParams();
     const [showQuizCreation, setShowQuizCreation] = useState(false);
     const [showQuizSolving, setShowQuizSolving] = useState(false);
     const [currentQuiz, setCurrentQuiz] = useState(null);
-
     const startShowQuizCreation = () => {
         setShowQuizCreation(true);
     }
@@ -49,6 +49,13 @@ const App = () => {
         startShowQuizSolving();
         return quiz;
     };
+
+    useEffect(() => {
+      if(quizID){
+        fetchSearchResult(quizID);
+      }
+    }
+    );
 
 
   return (
