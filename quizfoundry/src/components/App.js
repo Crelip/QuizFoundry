@@ -9,6 +9,7 @@ const App = () => {
 
     const [showQuizCreation, setShowQuizCreation] = useState(false);
     const [showQuizSolving, setShowQuizSolving] = useState(false);
+    const [currentQuiz, setCurrentQuiz] = useState(null);
 
     const startShowQuizCreation = () => {
         setShowQuizCreation(true);
@@ -29,42 +30,6 @@ const App = () => {
         },
       });
 
-    const [questions, setQuestions] = useState([
-        {id: 0,
-            questionText: "Z akej krajiny pochadza mandarinka Darinka?",
-            isChoice: true,
-            choiceAnswers: ["Grecko", "Spanielsko", "Estonsko", "Portugalsko"],
-            correctAnswers: ["Grecko"],
-            dynamicNext: true,
-            nextQuestion: function(answer) {
-                return answer === "Grecko" ? 1 : 2;
-            }
-        },
-        {  
-            id: 1,
-            questionText: "Kolko dni a noci stravila mandarinka Darinka v tranzite?",
-            isChoice: false,
-            correctAnswers: ["20"],
-            nextQuestion: 3
-        },
-        {
-            id: 2,
-            questionText: "Kto sa zalubil do mandarinky Darinky?",
-            isChoice: false,
-            correctAnswers: ["Jeden pomaranc", "Ovocie"],
-            nextQuestion: 3
-        },
-        {
-            id: 3,
-            questionText: "O com vedel cely strom?",
-            isChoice: true,
-            choiceAnswers: ["Ze uz je na svadbu cas", "Ze paraziti napadli strom", "Ze strom niekto ide obrat"],
-            correctAnswers: ["Ze uz je na svadbu cas"],
-            dynamicNext: false,
-            nextQuestion: -1
-        }
-    ]);
-
     const handleAddQuestion = (newQuestion) => {
         setQuestions([...questions, newQuestion]);
     };
@@ -74,12 +39,24 @@ const App = () => {
           });
       };
 
+    const fetchSearchResult = async (questionId) => {
+        const response = await fetch(process.env.REACT_APP_API_URL + 'quiz/' + questionId + '/');
+        if (!response.ok) {
+            throw new Error('Failed to fetch search results');
+        }
+        const quiz = await response.json();
+        setCurrentQuiz(quiz);
+        startShowQuizSolving();
+        return quiz;
+    };
+
+
   return (
     <div>
-      <Navbar theme={theme} startQuizCreation={startShowQuizCreation} startSampleQuiz={startShowQuizSolving}/>
+      <Navbar theme={theme} startQuizCreation={startShowQuizCreation} fetchSearchResult={fetchSearchResult} />
       <Container>
         {showQuizCreation && <QuizCreation theme={theme} questions={questions} onAddQuestion={handleAddQuestion} onDeleteQuestion={handleDeleteQuestion}/>}
-        {showQuizSolving && <QuizSolving theme={theme} initialQuestion={2}/>}
+        {showQuizSolving && <QuizSolving theme={theme} initialQuestion={currentQuiz.firstQuestion}/>}
       </Container>
     </div>
   );

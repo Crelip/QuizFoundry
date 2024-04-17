@@ -148,8 +148,8 @@ function QuizSolving({theme, initialQuestion }) {
         fetchChoices(initialQuestion)
         .then((choices) => {
           setCurrentChoices(choices.map(choice => choice.choiceAnswer));
+          setCurrentQuestion(data);
         });
-        setCurrentQuestion(data);
       } catch (error) {
         console.error('Error fetching initial question:', error);
       }

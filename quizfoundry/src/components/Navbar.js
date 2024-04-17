@@ -9,12 +9,26 @@ import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 import { ThemeProvider } from '@emotion/react';
 
-export default function Navbar({theme, startQuizCreation, startSampleQuiz}) {
-  const [isSearchClicked, setIsSearchClicked] = useState(false);
+export default function Navbar({theme, startQuizCreation, fetchSearchResult}) {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [loading, setLoading] = useState(false);
 
-  const handleSearchClick = () => {
-    setIsSearchClicked(true);
-  };
+    const handleSearchChange = (event) => {
+        setSearchQuery(event.target.value);
+    };
+
+    const handleSearchSubmit = async () => {
+        if (searchQuery.trim() !== '') {
+            setLoading(true);
+            try {
+                const searchResult = await fetchSearchResult(searchQuery);
+            } catch (error) {
+                console.error('Error fetching search result:', error);
+            } finally {
+                setLoading(false);
+            }
+        }
+    };
 
   return (
     <div>
@@ -23,26 +37,26 @@ export default function Navbar({theme, startQuizCreation, startSampleQuiz}) {
             <Toolbar sx={{ display: 'flex',
             justifyContent: 'space-between'
             }}>
-            {isSearchClicked ? (
+                <div>
                 <TextField
-                size="tiny"
+                size="small"
                 placeholder="Search"
                 sx={{ mr: 1, display: 'flex', alignItems: 'center' }}
                 variant='filled'
+                value={searchQuery}
+                onChange={handleSearchChange}
                 />
-            ) : (
                 <IconButton
-                size="large"
-                variant='contained'
-                edge="start"
-                color="inherit"
-                aria-label="menu"
-                onClick={handleSearchClick}
+                    size="small"
+                    variant='contained'
+                    color="inherit"
+                    aria-label="search"
+                    onClick={handleSearchSubmit}
                 >
-                <SearchIcon />
+                    <SearchIcon />
                 </IconButton>
-            )}
-
+                {loading && <Typography variant="body2">Loading...</Typography>}
+                </div>
             <Typography
                 variant="h6"
                 component="div"
@@ -56,9 +70,6 @@ export default function Navbar({theme, startQuizCreation, startSampleQuiz}) {
             </Typography>
 
             <div>
-                <Button onClick={startSampleQuiz} variant='contained' color="inherit" sx={{ display: { xs: 'none', sm: 'block' } }}>
-                    Sample quiz
-                </Button>
                 <Button onClick={startQuizCreation} variant='contained' color="inherit" sx={{ display: { xs: 'none', sm: 'block' } }}>
                     Create a new quiz
                 </Button>
