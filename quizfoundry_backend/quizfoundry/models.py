@@ -20,18 +20,6 @@ class Quiz(models.Model):
     def __str__(self):
         return self.quizName
 
-class Question(models.Model):
-    id = models.AutoField(primary_key=True)
-    quizID = models.PositiveIntegerField()
-    questionText = models.CharField(max_length=300)
-    isChoice = models.BooleanField()
-    multimedia = models.BinaryField()
-    dynamicNext = models.BooleanField()
-    def choices(self):
-        return ChoiceAnswers.objects.filter(questionID = self.id)
-    def __str__(self):
-        return self.questionText
-
 class ChoiceAnswers(models.Model):
     questionID = models.PositiveIntegerField()
     choiceAnswer = models.CharField(max_length=100)
@@ -50,6 +38,19 @@ class NextQuestion(models.Model):
     nextQuestionID = models.PositiveIntegerField()
     def __str__(self):
         return str(self.questionID) + " " + self.answer + " " + str(self.nextQuestionID)
+
+
+class Question(models.Model):
+    id = models.AutoField(primary_key=True)
+    quizID = models.PositiveIntegerField()
+    questionText = models.CharField(max_length=300)
+    isChoice = models.BooleanField()
+    multimedia = models.BinaryField()
+    dynamicNext = models.BooleanField()
+    def choices(self):
+        return ChoiceAnswers.objects.filter(questionID = self.id)
+    def __str__(self):
+        return self.questionText
 
 class Answer(models.Model):
     quizID = models.PositiveIntegerField()
