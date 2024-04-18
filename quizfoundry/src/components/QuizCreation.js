@@ -17,9 +17,6 @@ import {
 import { Add as AddIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { ThemeProvider } from '@emotion/react';
 
-//Questions and quiz are for now a variable, in the future they will be accesssed through an API.
-//let quiz = {id: 0, name: "Sample Quiz", owner: 0, firstQuestion: 0};
-
 const QuizCreation = ( {theme, questions, onAddQuestion, onDeleteQuestion }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [newQuestion, setNewQuestion] = useState('');
