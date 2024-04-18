@@ -5,8 +5,8 @@ import ListItemText from "@mui/material/ListItemText";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
-import { ThemeProvider } from "@emotion/react";
 import _ from "lodash";
+import { Typography } from "@mui/material";
 
 function QuizSolving({ initialQuestion }) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -170,8 +170,10 @@ function QuizSolving({ initialQuestion }) {
     <div>
       {currentQuestion && (
         <div>
-          <h2>Question {answeredQuestionsAmount + 1}</h2>
-          <p>{currentQuestion.questionText}</p>
+          <Typography variant="h4">
+            Question {answeredQuestionsAmount + 1}
+          </Typography>
+          <Typography>{currentQuestion.questionText}</Typography>
           {currentQuestion.isChoice ? (
             <div>
               <List component="div" aria-label="choices">
@@ -210,13 +212,15 @@ function QuizSolving({ initialQuestion }) {
       {!currentQuestion && answeredQuestionsAmount === 0 && <p>Loading...</p>}
       {!currentQuestion && answeredQuestionsAmount !== 0 && (
         <div>
-          <p>Quiz completed!</p>
-          <p>Total questions answered: {answeredQuestionsAmount}</p>
-          <p>Correct answers: {correctAnswersAmount}</p>
-          <p>
+          <Typography>Quiz completed!</Typography>
+          <Typography>
+            Total questions answered: {answeredQuestionsAmount}
+          </Typography>
+          <Typography>Correct answers: {correctAnswersAmount}</Typography>
+          <Typography>
             Success rate:{" "}
             {(correctAnswersAmount / answeredQuestionsAmount) * 100}%
-          </p>
+          </Typography>
         </div>
       )}
     </div>

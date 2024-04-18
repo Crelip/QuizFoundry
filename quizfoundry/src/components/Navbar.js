@@ -7,7 +7,6 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
-import { ThemeProvider } from "@emotion/react";
 
 export default function Navbar({ startQuizCreation, fetchSearchResult }) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -37,7 +36,7 @@ export default function Navbar({ startQuizCreation, fetchSearchResult }) {
           <div style={{ display: "flex", alignItems: "center" }}>
             <TextField
               size="small"
-              placeholder="Search"
+              placeholder="Enter quiz code"
               variant="filled"
               value={searchQuery}
               onChange={handleSearchChange}

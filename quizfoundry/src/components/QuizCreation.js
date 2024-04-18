@@ -15,7 +15,6 @@ import {
   Box,
 } from "@mui/material";
 import { Add as AddIcon, Delete as DeleteIcon } from "@mui/icons-material";
-import { ThemeProvider } from "@emotion/react";
 
 const QuizCreation = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
