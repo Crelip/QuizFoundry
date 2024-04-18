@@ -1,8 +1,9 @@
 import React, { useContext, useState } from "react";
 import AuthContext from "./context/AuthContext";
 import QuizCreation from "./QuizCreation";
+import { Grid, TextField, Button } from "@mui/material";
 
-const Login = ({ theme }) => {
+const Login = () => {
   const { user, loginUser } = useContext(AuthContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -17,25 +18,35 @@ const Login = ({ theme }) => {
     <div>
       {user ? (
         <div>
-          <QuizCreation theme={theme} />
+          <QuizCreation />
         </div>
       ) : (
         <form onSubmit={handleLogin}>
-          <input
-            type="text"
-            name="username"
-            placeholder="Enter username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Enter password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <input type="submit" value="Login" />
+          <Grid container direction="column" spacing={2}>
+            <Grid item>
+              <TextField
+                type="text"
+                label="Username"
+                variant="outlined"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </Grid>
+            <Grid item>
+              <TextField
+                type="password"
+                label="Password"
+                variant="outlined"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </Grid>
+            <Grid item>
+              <Button type="submit" variant="contained" color="primary">
+                Login
+              </Button>
+            </Grid>
+          </Grid>
         </form>
       )}
     </div>

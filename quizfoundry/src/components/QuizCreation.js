@@ -17,7 +17,7 @@ import {
 import { Add as AddIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import { ThemeProvider } from "@emotion/react";
 
-const QuizCreation = ({ theme }) => {
+const QuizCreation = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [newQuestion, setNewQuestion] = useState("");
   const [newAnswers, setNewAnswers] = useState([""]);
@@ -126,94 +126,92 @@ const QuizCreation = ({ theme }) => {
 
   return (
     <div>
-      <ThemeProvider theme={theme}>
-        <Typography variant="h5">Quiz Creation</Typography>
-        <List>
-          {questions.map((question) => (
-            <ListItem key={question.id}>
-              <ListItemText primary={question.questionText} />
-              <ListItemSecondaryAction>
-                <IconButton
-                  onClick={() => handleRemoveQuestion(question.id)}
-                  edge="end"
-                  aria-label="delete"
-                >
+      <Typography variant="h5">Quiz Creation</Typography>
+      <List>
+        {questions.map((question) => (
+          <ListItem key={question.id}>
+            <ListItemText primary={question.questionText} />
+            <ListItemSecondaryAction>
+              <IconButton
+                onClick={() => handleRemoveQuestion(question.id)}
+                edge="end"
+                aria-label="delete"
+              >
+                <DeleteIcon />
+              </IconButton>
+            </ListItemSecondaryAction>
+          </ListItem>
+        ))}
+      </List>
+      <Button
+        variant="contained"
+        color="primary"
+        startIcon={<AddIcon />}
+        onClick={() => setIsDialogOpen(true)}
+      >
+        Add Question
+      </Button>
+
+      <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
+        <DialogTitle>Add New Question</DialogTitle>
+        <DialogContent>
+          <TextField
+            margin="normal"
+            label="Question Text"
+            fullWidth
+            value={newQuestion}
+            onChange={(e) => setNewQuestion(e.target.value)}
+          />
+          {newAnswers.map((answer, index) => (
+            <div key={index}>
+              <TextField
+                margin="normal"
+                label={`Answer ${index + 1}`}
+                fullWidth
+                value={answer}
+                onChange={(e) => handleAnswerChange(index, e)}
+              />
+              {index > 0 && (
+                <IconButton onClick={() => handleRemoveAnswer(index)}>
                   <DeleteIcon />
                 </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
+              )}
+            </div>
           ))}
-        </List>
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<AddIcon />}
-          onClick={() => setIsDialogOpen(true)}
-        >
-          Add Question
-        </Button>
+          <Button color="primary" onClick={handleAddAnswer}>
+            Add Answer
+          </Button>
+          <Box sx={{ color: "text.secondary", fontSize: 8 }}>
+            Don't add answers if you don't want this to be a choice question
+          </Box>
 
-        <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
-          <DialogTitle>Add New Question</DialogTitle>
-          <DialogContent>
-            <TextField
-              margin="normal"
-              label="Question Text"
-              fullWidth
-              value={newQuestion}
-              onChange={(e) => setNewQuestion(e.target.value)}
-            />
-            {newAnswers.map((answer, index) => (
-              <div key={index}>
-                <TextField
-                  margin="normal"
-                  label={`Answer ${index + 1}`}
-                  fullWidth
-                  value={answer}
-                  onChange={(e) => handleAnswerChange(index, e)}
-                />
-                {index > 0 && (
-                  <IconButton onClick={() => handleRemoveAnswer(index)}>
-                    <DeleteIcon />
-                  </IconButton>
-                )}
-              </div>
-            ))}
-            <Button color="primary" onClick={handleAddAnswer}>
-              Add Answer
-            </Button>
-            <Box sx={{ color: "text.secondary", fontSize: 8 }}>
-              Don't add answers if you don't want this to be a choice question
-            </Box>
-
-            {newCorrectAnswers.map((correctAnswer, index) => (
-              <div key={index}>
-                <TextField
-                  margin="normal"
-                  label={`Correct Answer ${index + 1}`}
-                  fullWidth
-                  value={correctAnswer}
-                  onChange={(e) => handleCorrectAnswerChange(index, e)}
-                />
-                {index > 0 && (
-                  <IconButton onClick={() => handleRemoveCorrectAnswer(index)}>
-                    <DeleteIcon />
-                  </IconButton>
-                )}
-              </div>
-            ))}
-            <Button color="primary" onClick={handleAddCorrectAnswer}>
-              Add A Correct Answer
-            </Button>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setIsDialogOpen(false)}>Cancel</Button>
-            <Button onClick={handleAddQuestion} color="primary">
-              Add Question
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </ThemeProvider>
+          {newCorrectAnswers.map((correctAnswer, index) => (
+            <div key={index}>
+              <TextField
+                margin="normal"
+                label={`Correct Answer ${index + 1}`}
+                fullWidth
+                value={correctAnswer}
+                onChange={(e) => handleCorrectAnswerChange(index, e)}
+              />
+              {index > 0 && (
+                <IconButton onClick={() => handleRemoveCorrectAnswer(index)}>
+                  <DeleteIcon />
+                </IconButton>
+              )}
+            </div>
+          ))}
+          <Button color="primary" onClick={handleAddCorrectAnswer}>
+            Add A Correct Answer
+          </Button>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setIsDialogOpen(false)}>Cancel</Button>
+          <Button onClick={handleAddQuestion} color="primary">
+            Add Question
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

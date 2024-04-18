@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Container } from "@mui/material";
+import { Container, ThemeProvider } from "@mui/material";
 import Navbar from "./Navbar";
 import QuizSolving from "./QuizSolving";
 import { AuthProvider } from "./context/AuthContext";
@@ -53,25 +53,26 @@ const App = () => {
 
   return (
     <div>
-      <Navbar
-        theme={theme}
-        startQuizCreation={startShowQuizCreation}
-        fetchSearchResult={fetchSearchResult}
-      />
-      <Container>
-        {/*{showQuizCreation && <QuizCreation theme={theme} questions={questions} onAddQuestion={handleAddQuestion} onDeleteQuestion={handleDeleteQuestion}/>}*/}
-        {showQuizSolving && (
-          <QuizSolving
-            theme={theme}
-            initialQuestion={currentQuiz.firstQuestion}
-          />
-        )}
-        {showQuizCreation && (
-          <AuthProvider>
-            <Login theme={theme} />
-          </AuthProvider>
-        )}
-      </Container>
+      <ThemeProvider theme={theme}>
+        <Navbar
+          theme={theme}
+          startQuizCreation={startShowQuizCreation}
+          fetchSearchResult={fetchSearchResult}
+        />
+        <Container>
+          {showQuizSolving && (
+            <QuizSolving
+              theme={theme}
+              initialQuestion={currentQuiz.firstQuestion}
+            />
+          )}
+          {showQuizCreation && (
+            <AuthProvider>
+              <Login />
+            </AuthProvider>
+          )}
+        </Container>
+      </ThemeProvider>
     </div>
   );
 };
