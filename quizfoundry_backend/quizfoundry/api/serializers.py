@@ -4,7 +4,7 @@ from ..models import User, Quiz, Question, ChoiceAnswers, CorrectAnswers, NextQu
 class QuizSerializer(ModelSerializer):
     class Meta:
         model = Quiz
-        fields = '__all__'
+        fields = ('id', 'quizName', 'quizOwner', 'dateCreated', 'firstQuestion')
 
 class UserSerializer(ModelSerializer):
     class Meta:
@@ -19,7 +19,7 @@ class ChoiceAnswersSerializer(ModelSerializer):
 class CorrectAnswersSerializer(ModelSerializer):
     class Meta:
         model = CorrectAnswers
-        fields = ('questionID', 'correctAnswer')
+        fields = '__all__'
 
 class NextQuestionSerializer(ModelSerializer):
     class Meta:

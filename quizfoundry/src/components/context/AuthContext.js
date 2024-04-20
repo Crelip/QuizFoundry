@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
   let [user, setUser] = useState(null);
   let [authTokens, setAuthTokens] = useState(null);
 
-  let loginUser = async (username, password) => {
+  let loginUser = async (username, password, setUserID) => {
     const response = await fetch(process.env.REACT_APP_API_URL + "token/", {
       method: "POST",
       headers: {
@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("authTokens", JSON.stringify(data));
       setAuthTokens(data);
       let tmp = jwtDecode(data.access);
-      console.log(tmp);
+      setUserID(tmp.user_id);
       setUser(username);
     } else {
       alert("Something went wrong during authentication.");

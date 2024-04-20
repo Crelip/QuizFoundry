@@ -1,5 +1,7 @@
 from rest_framework.viewsets import ModelViewSet, generics
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from ..models import User, Quiz, Question, ChoiceAnswers, CorrectAnswers, NextQuestion
 from .serializers import QuizSerializer, UserSerializer, QuestionSerializer, ChoiceAnswersSerializer, CorrectAnswersSerializer, NextQuestionSerializer
 
@@ -41,3 +43,68 @@ class NextQuestionListView(ListAPIView):
     def get_queryset(self):
         question_id = self.kwargs['questionID']
         return NextQuestion.objects.filter(questionID=question_id)
+    
+class CreateQuizView(CreateAPIView):
+    serializer_class = QuizSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            quiz = serializer.save()
+            return Response({'id': quiz.id}, status=201)
+        return Response(serializer.errors, status=400)
+    
+class AddQuestionView(CreateAPIView):
+    serializer_class = QuestionSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            question = serializer.save()
+            return Response({'id': question.id}, status=201)
+        return Response(serializer.errors, status=400)
+    
+class AddCorrectAnswerView(CreateAPIView):
+    serializer_class = CorrectAnswersSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({}, status=201)
+        return Response(serializer.errors, status=400)
+    
+class AddChoiceAnswerView(CreateAPIView):
+    serializer_class = ChoiceAnswersSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({}, status=201)
+        return Response(serializer.errors, status=400)
+    
+class AddNextQuestionView(CreateAPIView):
+    serializer_class = NextQuestionSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({}, status=201)
+        return Response(serializer.errors, status=400)
+    
+class UpdateFirstQuestionOfAQuizView(APIView):
+    def post(self, request):
+        try:
+            quiz_id = request.data.get('id')
+            first_question = request.data.get('firstQuestion')
+            quiz_instance = Quiz.objects.get(id=quiz_id)
+            quiz_instance.firstQuestion = first_question
+            quiz_instance.save()
+            serializer = QuizSerializer(quiz_instance)
+            return Response(serializer.data, status=200)
+        except Quiz.DoesNotExist:
+            return Response({"message": "Quiz not found"}, status=404)
+        except Exception as e:
+            return Response({"message": str(e)}, status=400)

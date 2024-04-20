@@ -40,6 +40,8 @@ const App = () => {
       throw new Error("Failed to fetch search results");
     }
     const quiz = await response.json();
+    if (quiz.firstQuestion === 0)
+      throw new Error("Failed to fetch search results.");
     setCurrentQuiz(quiz);
     startShowQuizSolving();
     return quiz;
