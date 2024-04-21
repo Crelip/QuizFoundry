@@ -15,6 +15,8 @@ class Quiz(models.Model):
     quizOwner = models.PositiveIntegerField()
     dateCreated = models.DateTimeField(auto_now_add=True)
     firstQuestion = models.PositiveIntegerField()
+    def questions(self):
+        return Question.objects.filter(quizID = self.id)
     def __str__(self):
         return self.quizName
 
@@ -45,6 +47,8 @@ class Question(models.Model):
     isChoice = models.BooleanField()
     multimedia = models.BinaryField()
     dynamicNext = models.BooleanField()
+    def choices(self):
+        return ChoiceAnswers.objects.filter(questionID = self.id)
     def __str__(self):
         return self.questionText
 

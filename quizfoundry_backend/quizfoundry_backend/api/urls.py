@@ -1,7 +1,7 @@
 from rest_framework.routers import DefaultRouter
-from quizfoundry.api.urls import quiz_router, user_router
+from quizfoundry.api.urls import quiz_router
 from django.urls import path, include
-from quizfoundry.api.views import QuizDetailView, QuestionDetailView, ChoiceAnswersListView, CorrectAnswersListView, NextQuestionListView, CreateQuizView, AddQuestionView, AddCorrectAnswerView, AddChoiceAnswerView, AddNextQuestionView, UpdateFirstQuestionOfAQuizView
+from quizfoundry.api.views import QuizDetailView, QuestionDetailView, ChoiceAnswersListView, CorrectAnswersListView, NextQuestionListView, CreateQuizView, AddQuestionView, AddCorrectAnswerView, AddChoiceAnswerView, AddNextQuestionView, UpdateFirstQuestionOfAQuizView, UserRegistrationView
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView
@@ -10,7 +10,6 @@ from rest_framework_simplejwt.views import (
 router = DefaultRouter()
 # Quizzes test
 router.registry.extend(quiz_router.registry)
-router.registry.extend(user_router.registry)
 
 urlpatterns = [
     path('', include(router.urls)),
@@ -26,5 +25,6 @@ urlpatterns = [
     path('add_correct_answer/', AddCorrectAnswerView.as_view(), name="add_correct_answer"),
     path('add_choice_answer/', AddChoiceAnswerView.as_view(), name="add_choice_answer"),
     path('add_next_question/', AddNextQuestionView.as_view(), name="add_next_question"),
-    path('update_first_question/', UpdateFirstQuestionOfAQuizView.as_view(), name='update_first_question')
+    path('update_first_question/', UpdateFirstQuestionOfAQuizView.as_view(), name='update_first_question'),
+    path('register/', UserRegistrationView.as_view(), name='user_registration')
 ]
