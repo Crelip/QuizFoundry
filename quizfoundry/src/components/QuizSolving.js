@@ -8,7 +8,7 @@ import TextField from "@mui/material/TextField";
 import _ from "lodash";
 import { Typography } from "@mui/material";
 
-function QuizSolving({ initialQuestion }) {
+function QuizSolving({ initialQuestion, quizID }) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState([]);
   const [answeredQuestionsAmount, setAnsweredQuestionsAmount] = useState(0);
@@ -102,12 +102,16 @@ function QuizSolving({ initialQuestion }) {
           ans = true;
         }
 
-        const updatedUserAnswers = [...userAnswers, answer];
+        setUserAnswers([
+          ...userAnswers,
+          { questionID: question.id, answer: answer, isCorrect: ans },
+        ]);
         // Finding the next question (if no next question, it should be -1)
         console.log(nextQuestion.length);
         if (nextQuestion.length === 0) {
           setCurrentQuestionIndex(-1);
           setCurrentQuestion(null);
+          finishQuiz();
         } else if (question.dynamicNext) {
           changeQuestion(
             nextQuestion.find(
@@ -121,7 +125,6 @@ function QuizSolving({ initialQuestion }) {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-
     return ans;
   };
 
@@ -143,9 +146,60 @@ function QuizSolving({ initialQuestion }) {
     return ans;
   };
 
-  let isCorrectAnswer = (choice, currentQuestion) => {
+  const isCorrectAnswer = (choice, currentQuestion) => {
     const isCorrect = handleAnswer(choice, currentQuestion);
-    console.log(isCorrect);
+  };
+
+  const finishQuiz = async () => {
+    console.log("Finishing quiz");
+    console.log(quizID);
+    let answerID;
+    //Send the results to the backend
+    try {
+      const response = await fetch(
+        process.env.REACT_APP_API_URL + "add_answer/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            quizID: quizID,
+            userID: 0,
+            correctAnswers: correctAnswersAmount,
+            totalQuestions: answeredQuestionsAmount,
+          }),
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        answerID = data.id;
+      } else return;
+    } catch (error) {
+      console.error("Error:", error);
+      return;
+    }
+    userAnswers.forEach(async (answer) => {
+      try {
+        const response = await fetch(
+          process.env.REACT_APP_API_URL + "add_answer_question/",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              answerID: answerID,
+              questionID: answer.questionID,
+              answer: answer.answer,
+              isCorrect: answer.isCorrect,
+            }),
+          }
+        );
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    });
   };
 
   useEffect(() => {

@@ -3,7 +3,7 @@ from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from ..models import User, Quiz, Question, ChoiceAnswers, CorrectAnswers, NextQuestion
-from .serializers import QuizSerializer, QuestionSerializer, ChoiceAnswersSerializer, CorrectAnswersSerializer, NextQuestionSerializer, UserRegistrationSerializer
+from .serializers import QuizSerializer, QuestionSerializer, ChoiceAnswersSerializer, CorrectAnswersSerializer, NextQuestionSerializer, UserRegistrationSerializer, AnswerSerializer, AnswerQuestionSerializer
 
 class QuizViewSet(ModelViewSet):
     queryset = Quiz.objects.all()
@@ -112,4 +112,24 @@ class UserRegistrationView(APIView):
         if serializer.is_valid():
             user = serializer.save()
             return Response({"message": "User registered successfully"}, status=201)
+        return Response(serializer.errors, status=400)
+    
+class AddAnswerView(CreateAPIView):
+    serializer_class = AnswerSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            answer = serializer.save()
+            return Response({'id': answer.id}, status=201)
+        return Response(serializer.errors, status=400)
+    
+class AddAnswerQuestionView(CreateAPIView):
+    serializer_class = AnswerQuestionSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({}, status=201)
         return Response(serializer.errors, status=400)

@@ -57,15 +57,14 @@ const App = () => {
     <div>
       <ThemeProvider theme={theme}>
         <Navbar
-          theme={theme}
           startQuizCreation={startShowQuizCreation}
           fetchSearchResult={fetchSearchResult}
         />
         <Container>
           {showQuizSolving && (
             <QuizSolving
-              theme={theme}
               initialQuestion={currentQuiz.firstQuestion}
+              quizID={currentQuiz.id}
             />
           )}
           {showQuizCreation && (

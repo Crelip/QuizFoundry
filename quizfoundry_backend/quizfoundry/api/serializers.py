@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer
-from ..models import User, Quiz, Question, ChoiceAnswers, CorrectAnswers, NextQuestion
+from ..models import User, Quiz, Question, ChoiceAnswers, CorrectAnswers, NextQuestion, Answer, AnswerQuestion
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
@@ -45,3 +45,13 @@ class UserRegistrationSerializer(ModelSerializer):
             password=validated_data['password']
         )
         return user
+
+class AnswerSerializer(ModelSerializer):
+    class Meta:
+        model = Answer
+        fields = '__all__'
+
+class AnswerQuestionSerializer(ModelSerializer):
+    class Meta:
+        model = AnswerQuestion
+        fields = '__all__'
