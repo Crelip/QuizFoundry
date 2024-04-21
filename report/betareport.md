@@ -1,4 +1,4 @@
-# Beta report: 5. report (8.4. - 14.4), beta_version
+# Beta report: beta_version
 
 ## Filip Hošták
 
@@ -7,52 +7,37 @@
 ## Link na verejnú inštanciu projektu:
 https://quizfoundry.surge.sh/
 
-## Pôvodné plány
-
-- Implementácia Django backendu
-
-## Vykonaná práca
-
-- Vykonaná práca za tento týždeň sa niesla najmä v duchu implementácie backendu a
-zároveň aj spolupráce backendu s frontendom
-
-b4d5f7e Added user answer logging (for now it just puts the data into the database).
-d5790ea Added user registration through web app.
-788e6e4 Implemented frontend-backend coordination in quiz creation.
-6f389fe Changed the font on some elements.
-2c5fba4 Slightly changed the look of the app.
-295de60 Implemented proper authentification to be used by frontend.
-a56d106 Added Login and AuthContext elements. (without proper authentification atm)
-3551870 Started adding basic JWT authentification.
-4f0f503 Replaced deprecated ReactDOM.render with createRoot
-4b121ab Added the ability to launch a quiz directly by using a given link.
-9133518 Added 'react-router-dom' package.
-65c873a Implemented basic search by quiz id functionality.
-a8cc290 Set up backend and frontend coordination in solving quizzes.
-87fe65f Set Up API for question solving.
-0ec925e Got a REST API request working from backend to frontend.
-36bcc0b Testing Rest API.
-bcd3779 Set up data models.
-7a5b46b Initial backend setup.
-
-- Okrem tejto práce som aj deployoval projekt
-	- to zahŕňa nastavovanie hostingov
-
-Celkový čas: 25 hodín
-
 ## Ako rozbehať vývojové prostredie
-1. Naklonovať si tento repozitár
-2. V priečinku quizfoundry sa nachádza React frontend - keď si priečinok otvoríme v
-termináli, tak príkazom "npm start" ho spustíme
-3. V priečinku quizfoundry_backend sa nachádza Django backend
+- Naklonovať si tento repozitár
+### Frontend
+- Nainštalovať si npm pomocou `apt install npm`
+- V priečinku quizfoundry sa nachádza React frontend - keď si priečinok otvoríme v
+termináli, tak príkazom `npm start` ho spustíme
+- na adrese "localhost:3000" by sa nám mal zobraziť frontend
+### Backend
+- Nainštalovať si PostgreSQL cez `apt install postgres`
+- Spustiť príkaz `psql -U postgres` a potom zadať `CREATE DATABASE quizfoundrydb;` na vytvorenie databázy
+- Nainštalovať si python3 cez `apt install python3`
+- Stiahnuť si potrebné python package, teda `pip install django psycopg2 django-cors-headers djangorestframework`
+- V priečinku quizfoundry_backend sa nachádza Django backend, vstúpime doň
+- Pred prvým spustením backendu treba premigrovať databázu pomocou `python3 manage.py migrate`
+- Teraz môžeme spustiť backend pomocou `python3 manage.py runserver`
+
+## Implementované časti špecifikácie
+- Tvorba nových kvízov (aspoň z väčšiny)
+- Riešenie kvízov, zahŕňa aj branching kvízy
+- Backend v Django prepojený s PostgreSQL databázou
+- Základná autentifikácia a registrácia používateľov
 
 ## Čo chýba voči špecifikácii
-- Branching kvízy fungujú z hľadiska riešenia kvízov, ale zatiaľ nie je možné ich
+- zatiaľ nie je možné branching kvízy
 vytvárať priamo vo webovej aplikácii (teraz idú otázky za sebou)
 - Multimédiá v jednotlivých otázkach
 
-## Ďalší týždeň
-- Dopľňanie chýbajúcich požiadaviek zo špecifikácie
-- Zapracovanie feedbacku z prezentácie beta verzie
+## Problémy
 - Problémy som mal asi najviac s tým, že som činnosť na projekte odkladal a
 tento týždeň bolo veľa práce
+- Jedná sa o moje prvé stretnutie s Reactom + Djangom; s HTML, CSS a JS (aj jQuery)
+už mám z minulosti skúsenosti, ale aj to bolo už pomerne dávno (najmä Django bolo
+spočiatku celkom ťažké vzhľadom na potrebu pochopenia serializers, views, urls a
+chvíľu som sa trápil so správnym nabindovaním pathov pre REST API)
