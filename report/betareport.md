@@ -1,17 +1,17 @@
-#Beta report: 5. report (8.4. - 14.4), beta_version
+# Beta report: 5. report (8.4. - 14.4), beta_version
 
-##Filip Hošták
+## Filip Hošták
 
-##QuizFoundry
+## QuizFoundry
 
-##Link na verejnú inštanciu projektu:
+## Link na verejnú inštanciu projektu:
 https://quizfoundry.surge.sh/
 
-##Pôvodné plány
+## Pôvodné plány
 
 - Implementácia Django backendu
 
-##Vykonaná práca
+## Vykonaná práca
 
 - Vykonaná práca za tento týždeň sa niesla najmä v duchu implementácie backendu a
 zároveň aj spolupráce backendu s frontendom
@@ -40,18 +40,18 @@ bcd3779 Set up data models.
 
 Celkový čas: 25 hodín
 
-##Ako rozbehať vývojové prostredie
+## Ako rozbehať vývojové prostredie
 1. Naklonovať si tento repozitár
 2. V priečinku quizfoundry sa nachádza React frontend - keď si priečinok otvoríme v
 termináli, tak príkazom "npm start" ho spustíme
 3. V priečinku quizfoundry_backend sa nachádza Django backend
 
-##Čo chýba voči špecifikácii
+## Čo chýba voči špecifikácii
 - Branching kvízy fungujú z hľadiska riešenia kvízov, ale zatiaľ nie je možné ich
 vytvárať priamo vo webovej aplikácii (teraz idú otázky za sebou)
 - Multimédiá v jednotlivých otázkach
 
-##Ďalší týždeň
+## Ďalší týždeň
 - Dopľňanie chýbajúcich požiadaviek zo špecifikácie
 - Zapracovanie feedbacku z prezentácie beta verzie
 - Problémy som mal asi najviac s tým, že som činnosť na projekte odkladal a
