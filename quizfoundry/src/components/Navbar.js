@@ -74,6 +74,7 @@ export default function Navbar({ startQuizCreation, fetchSearchResult }) {
               Create a new quiz
             </Button>
             <IconButton
+              onClick={startQuizCreation}
               variant="contained"
               color="inherit"
               sx={{ display: { xs: "block", sm: "none" } }}
