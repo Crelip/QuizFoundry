@@ -10,8 +10,6 @@ import { green } from "@mui/material/colors";
 const App = () => {
   let { quizID } = useParams();
   const [currentView, setCurrentView] = useState(null);
-  const [showQuizCreation, setShowQuizCreation] = useState(false);
-  const [showQuizSolving, setShowQuizSolving] = useState(false);
   const [currentQuiz, setCurrentQuiz] = useState(null);
   const startShowQuizCreation = () => {
     setCurrentView("quizCreation");
