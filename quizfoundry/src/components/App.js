@@ -71,7 +71,7 @@ const App = () => {
           )}
           {currentView === "quizCreation" && (
             <AuthProvider>
-              <Login />
+              <Login setQuizName={setQuizName} />
             </AuthProvider>
           )}
         </Container>

@@ -1,8 +1,8 @@
 import { Grid, Button, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import QuizCreation from "./QuizCreation";
 
-const StartQuizCreation = ({ userID }) => {
+const StartQuizCreation = ({ userID, setHeader }) => {
   const [quizName, setQuizName] = useState("");
   const [isQuiz, setIsQuiz] = useState(false);
   const [quizID, setQuizID] = useState(0);
@@ -30,6 +30,7 @@ const StartQuizCreation = ({ userID }) => {
         console.log(data);
         setQuizID(data.id);
         setIsQuiz(true);
+        setHeader('Creating "' + quizName + '"');
       } else {
         console.error("Failed to create quiz:", response);
       }
@@ -37,13 +38,17 @@ const StartQuizCreation = ({ userID }) => {
       console.error("Error:", error);
     }
   };
+
+  useEffect(() => {
+    if (!isQuiz) setHeader("Start making a quiz");
+  });
+
   return (
     <div>
       {isQuiz ? (
         <QuizCreation quizID={quizID} />
       ) : (
         <div>
-          <Typography variant="h4">Start making a quiz:</Typography>
           <form onSubmit={handleStartQuizCreation}>
             <Grid container direction="column" spacing={2}>
               <Grid item>

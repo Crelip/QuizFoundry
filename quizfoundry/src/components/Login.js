@@ -1,9 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AuthContext from "./context/AuthContext";
 import StartQuizCreation from "./StartQuizCreation";
 import { Grid, TextField, Button, Typography } from "@mui/material";
 
-const Login = () => {
+const Login = ({ setQuizName }) => {
   const { user, loginUser } = useContext(AuthContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -46,11 +46,15 @@ const Login = () => {
     setRegisteringUser(true);
   };
 
+  useEffect(() => {
+    if (!user) setQuizName("Login");
+  });
+
   return (
     <div>
       {user ? (
         <div>
-          <StartQuizCreation userID={userID} />
+          <StartQuizCreation userID={userID} setHeader={setQuizName} />
         </div>
       ) : registeringUser ? (
         <div>

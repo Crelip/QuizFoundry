@@ -227,7 +227,6 @@ const QuizCreation = ({ quizID }) => {
         </div>
       ) : (
         <div>
-          <Typography variant="h5">Quiz Creation</Typography>
           <List>
             {questions.map((question) => (
               <ListItem key={question.id}>
