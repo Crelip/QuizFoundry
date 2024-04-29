@@ -9,16 +9,17 @@ import { createTheme } from "@mui/material";
 import { green } from "@mui/material/colors";
 const App = () => {
   let { quizID } = useParams();
+  const [currentView, setCurrentView] = useState(null);
   const [showQuizCreation, setShowQuizCreation] = useState(false);
   const [showQuizSolving, setShowQuizSolving] = useState(false);
   const [currentQuiz, setCurrentQuiz] = useState(null);
   const startShowQuizCreation = () => {
-    setShowQuizCreation(true);
+    setCurrentView("quizCreation");
   };
   const questions = [1, 2];
 
   const startShowQuizSolving = () => {
-    setShowQuizSolving(true);
+    setCurrentView("quizSolving");
   };
 
   const theme = createTheme({
@@ -61,13 +62,13 @@ const App = () => {
           fetchSearchResult={fetchSearchResult}
         />
         <Container>
-          {showQuizSolving && (
+          {currentView === "quizSolving" && (
             <QuizSolving
               initialQuestion={currentQuiz.firstQuestion}
               quizID={currentQuiz.id}
             />
           )}
-          {showQuizCreation && (
+          {currentView === "quizCreation" && (
             <AuthProvider>
               <Login />
             </AuthProvider>
