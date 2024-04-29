@@ -11,10 +11,10 @@ const App = () => {
   let { quizID } = useParams();
   const [currentView, setCurrentView] = useState(null);
   const [currentQuiz, setCurrentQuiz] = useState(null);
+  const [quizName, setQuizName] = useState("QuizFoundry");
   const startShowQuizCreation = () => {
     setCurrentView("quizCreation");
   };
-  const questions = [1, 2];
 
   const startShowQuizSolving = () => {
     setCurrentView("quizSolving");
@@ -31,9 +31,9 @@ const App = () => {
     },
   });
 
-  const fetchSearchResult = async (questionId) => {
+  const fetchSearchResult = async (questionID) => {
     const response = await fetch(
-      process.env.REACT_APP_API_URL + "quiz/" + questionId + "/"
+      process.env.REACT_APP_API_URL + "quiz/" + questionID + "/"
     );
     if (!response.ok) {
       throw new Error("Failed to fetch search results");
@@ -43,6 +43,7 @@ const App = () => {
       throw new Error("Failed to fetch search results.");
     setCurrentQuiz(quiz);
     startShowQuizSolving();
+    setQuizName(quiz.quizName);
     return quiz;
   };
 
@@ -58,6 +59,8 @@ const App = () => {
         <Navbar
           startQuizCreation={startShowQuizCreation}
           fetchSearchResult={fetchSearchResult}
+          quizName={quizName}
+          setQuizName={setQuizName}
         />
         <Container>
           {currentView === "quizSolving" && (

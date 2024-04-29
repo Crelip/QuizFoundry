@@ -8,10 +8,13 @@ import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
 
-export default function Navbar({ startQuizCreation, fetchSearchResult }) {
+export default function Navbar({
+  startQuizCreation,
+  fetchSearchResult,
+  quizName,
+}) {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
-
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
@@ -61,7 +64,7 @@ export default function Navbar({ startQuizCreation, fetchSearchResult }) {
               flexGrow: 1,
             }}
           >
-            QuizFoundry
+            {quizName}
           </Typography>
 
           <div>
