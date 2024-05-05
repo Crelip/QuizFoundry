@@ -7,12 +7,14 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
 import LoginIcon from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 export default function Navbar({
   showLoginScreen,
   fetchSearchResult,
   header,
   currentUser,
+  logOut,
 }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
@@ -88,7 +90,22 @@ export default function Navbar({
             </div>
           ) : (
             <div>
-              <Typography>Log out</Typography>
+              <Button
+                onClick={logOut}
+                variant="contained"
+                color="inherit"
+                sx={{ display: { xs: "none", sm: "block" } }}
+              >
+                Log out
+              </Button>
+              <IconButton
+                onClick={logOut}
+                variant="contained"
+                color="inherit"
+                sx={{ display: { xs: "block", sm: "none" } }}
+              >
+                <LogoutIcon />
+              </IconButton>
             </div>
           )}
         </Toolbar>

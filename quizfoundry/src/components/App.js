@@ -57,6 +57,11 @@ export default function App() {
     else setCurrentView("quizCreation");
   };
 
+  const logOut = () => {
+    setCurrentUser(-1);
+    window.location.reload();
+  };
+
   useEffect(() => {
     if (quizID) {
       fetchSearchResult(quizID);
@@ -71,6 +76,7 @@ export default function App() {
           fetchSearchResult={fetchSearchResult}
           header={header}
           currentUser={currentUser}
+          logOut={logOut}
         />
         <Container>
           {currentView === "welcomeScreen" && (
