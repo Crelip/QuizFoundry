@@ -6,7 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
-import AddIcon from "@mui/icons-material/Add";
+import LoginIcon from "@mui/icons-material/Login";
 
 export default function Navbar({
   showLoginScreen,
@@ -83,12 +83,12 @@ export default function Navbar({
                 color="inherit"
                 sx={{ display: { xs: "block", sm: "none" } }}
               >
-                <AddIcon />
+                <LoginIcon />
               </IconButton>
             </div>
           ) : (
             <div>
-              <Typography>Unsign</Typography>
+              <Typography>Log out</Typography>
             </div>
           )}
         </Toolbar>
