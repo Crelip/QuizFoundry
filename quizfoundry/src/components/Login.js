@@ -3,7 +3,12 @@ import AuthContext from "./context/AuthContext";
 import StartQuizCreation from "./StartQuizCreation";
 import { Grid, TextField, Button, Typography } from "@mui/material";
 
-export default function Login({ setHeader, currentUser, setCurrentUser }) {
+export default function Login({
+  setHeader,
+  currentUser,
+  setCurrentUser,
+  setCurrentView,
+}) {
   const { user, loginUser } = useContext(AuthContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -13,7 +18,8 @@ export default function Login({ setHeader, currentUser, setCurrentUser }) {
   //Authentication
   const handleLogin = (e) => {
     e.preventDefault();
-    loginUser(username, password, setCurrentUser);
+    if (loginUser(username, password, setCurrentUser))
+      setCurrentView("welcomeScreen");
   };
 
   //Registation

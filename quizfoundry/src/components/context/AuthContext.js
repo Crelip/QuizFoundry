@@ -20,14 +20,16 @@ export const AuthProvider = ({ children }) => {
     let data = await response.json();
     if (data) {
       if (data.detail === "No active account found with the given credentials")
-        return;
+        return false;
       localStorage.setItem("authTokens", JSON.stringify(data));
       setAuthTokens(data);
       let tmp = jwtDecode(data.access);
       setUserID(tmp.user_id);
       setUser(username);
+      return true;
     } else {
       alert("Something went wrong during authentication.");
+      return false;
     }
   };
 

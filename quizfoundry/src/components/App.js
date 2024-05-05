@@ -8,6 +8,7 @@ import Login from "./Login";
 import { createTheme } from "@mui/material";
 import { green } from "@mui/material/colors";
 import WelcomeScreen from "./WelcomeScreen";
+import StartQuizCreation from "./StartQuizCreation";
 export default function App() {
   let { quizID } = useParams();
   const [currentView, setCurrentView] = useState("welcomeScreen");
@@ -49,6 +50,13 @@ export default function App() {
     return quiz;
   };
 
+  const handleStartQuizCreation = () => {
+    //If the user is not signed in, it will open the login screen.
+    if (currentUser === -1) setCurrentView("loginScreen");
+    //If the user is signed in, it will directly open the quiz creation screen.
+    else setCurrentView("quizCreation");
+  };
+
   useEffect(() => {
     if (quizID) {
       fetchSearchResult(quizID);
@@ -65,7 +73,9 @@ export default function App() {
           currentUser={currentUser}
         />
         <Container>
-          {currentView === "welcomeScreen" && <WelcomeScreen />}
+          {currentView === "welcomeScreen" && (
+            <WelcomeScreen handleStartQuizCreation={handleStartQuizCreation} />
+          )}
           {currentView === "quizSolving" && (
             <QuizSolving
               initialQuestion={currentQuiz.firstQuestion}
@@ -78,8 +88,12 @@ export default function App() {
                 setHeader={setHeader}
                 currentUser={currentUser}
                 setCurrentUser={setCurrentUser}
+                setCurrentView={setCurrentView}
               />
             </AuthProvider>
+          )}
+          {currentView == "quizCreation" && (
+            <StartQuizCreation userID={currentUser} setHeader={setHeader} />
           )}
         </Container>
       </ThemeProvider>
