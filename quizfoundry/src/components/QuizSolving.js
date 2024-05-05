@@ -101,17 +101,22 @@ export default function QuizSolving({ initialQuestion, quizID, userID }) {
           setCorrectAnswersAmount(correctAnswersAmount + 1);
           ans = true;
         }
-
         setUserAnswers([
           ...userAnswers,
           { questionID: question.id, answer: answer, isCorrect: ans },
         ]);
         // Finding the next question (if no next question, it should be -1)
-        console.log(nextQuestion.length);
         if (nextQuestion.length === 0) {
           setCurrentQuestionIndex(-1);
           setCurrentQuestion(null);
-          finishQuiz();
+          finishQuiz([
+            ...userAnswers,
+            {
+              questionID: question.id,
+              answer: answer,
+              isCorrect: ans,
+            },
+          ]);
         } else if (question.dynamicNext) {
           changeQuestion(
             nextQuestion.find(
@@ -150,9 +155,7 @@ export default function QuizSolving({ initialQuestion, quizID, userID }) {
     const isCorrect = handleAnswer(choice, currentQuestion);
   };
 
-  const finishQuiz = async () => {
-    console.log("Finishing quiz");
-    console.log(quizID);
+  const finishQuiz = async (answers) => {
     let answerID;
     //Send the results to the backend
     try {
@@ -166,8 +169,8 @@ export default function QuizSolving({ initialQuestion, quizID, userID }) {
           body: JSON.stringify({
             quizID: quizID,
             userID: userID,
-            correctAnswers: correctAnswersAmount,
-            totalQuestions: answeredQuestionsAmount,
+            correctAnswers: answers.filter((answer) => answer.isCorrect).length,
+            totalQuestions: answeredQuestionsAmount + 1,
           }),
         }
       );
@@ -179,7 +182,7 @@ export default function QuizSolving({ initialQuestion, quizID, userID }) {
       console.error("Error:", error);
       return;
     }
-    userAnswers.forEach(async (answer) => {
+    answers.forEach(async (answer) => {
       try {
         const response = await fetch(
           process.env.REACT_APP_API_URL + "add_answer_question/",
