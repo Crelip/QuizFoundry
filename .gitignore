@@ -1,2 +1,5 @@
 quizfoundry_backend/quizfoundry/__pycache__/
 quizfoundry_backend/quizfoundry/migrations/
+quizfoundry_backend/quizfoundry/api/__pycache__/
+quizfoundry_backend/quizfoundry_backend/__pycache__/
+quizfoundry_backend/quizfoundry_backend/api/__pycache__/
