@@ -7,13 +7,15 @@ import { AuthProvider } from "./context/AuthContext";
 import Login from "./Login";
 import { createTheme } from "@mui/material";
 import { green } from "@mui/material/colors";
-const App = () => {
+import WelcomeScreen from "./WelcomeScreen";
+export default function App() {
   let { quizID } = useParams();
-  const [currentView, setCurrentView] = useState(null);
+  const [currentView, setCurrentView] = useState("welcomeScreen");
   const [currentQuiz, setCurrentQuiz] = useState(null);
-  const [quizName, setQuizName] = useState("QuizFoundry");
-  const startShowQuizCreation = () => {
-    setCurrentView("quizCreation");
+  const [header, setHeader] = useState("QuizFoundry");
+  const [currentUser, setCurrentUser] = useState(-1);
+  const showLoginScreen = () => {
+    setCurrentView("loginScreen");
   };
 
   const startShowQuizSolving = () => {
@@ -57,27 +59,26 @@ const App = () => {
     <div>
       <ThemeProvider theme={theme}>
         <Navbar
-          startQuizCreation={startShowQuizCreation}
+          showLoginScreen={showLoginScreen}
           fetchSearchResult={fetchSearchResult}
-          quizName={quizName}
-          setQuizName={setQuizName}
+          header={header}
+          currentUser={currentUser}
         />
         <Container>
+          {currentView === "welcomeScreen" && <WelcomeScreen />}
           {currentView === "quizSolving" && (
             <QuizSolving
               initialQuestion={currentQuiz.firstQuestion}
               quizID={currentQuiz.id}
             />
           )}
-          {currentView === "quizCreation" && (
+          {currentView === "loginScreen" && (
             <AuthProvider>
-              <Login setQuizName={setQuizName} />
+              <Login setHeader={setHeader} />
             </AuthProvider>
           )}
         </Container>
       </ThemeProvider>
     </div>
   );
-};
-
-export default App;
+}

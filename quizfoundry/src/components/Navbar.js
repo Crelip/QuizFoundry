@@ -9,9 +9,10 @@ import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
 
 export default function Navbar({
-  startQuizCreation,
+  showLoginScreen,
   fetchSearchResult,
-  quizName,
+  header,
+  currentUser,
 }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
@@ -64,27 +65,32 @@ export default function Navbar({
               flexGrow: 1,
             }}
           >
-            {quizName}
+            {header}
           </Typography>
-
-          <div>
-            <Button
-              onClick={startQuizCreation}
-              variant="contained"
-              color="inherit"
-              sx={{ display: { xs: "none", sm: "block" } }}
-            >
-              Create a new quiz
-            </Button>
-            <IconButton
-              onClick={startQuizCreation}
-              variant="contained"
-              color="inherit"
-              sx={{ display: { xs: "block", sm: "none" } }}
-            >
-              <AddIcon />
-            </IconButton>
-          </div>
+          {currentUser === -1 ? (
+            <div>
+              <Button
+                onClick={showLoginScreen}
+                variant="contained"
+                color="inherit"
+                sx={{ display: { xs: "none", sm: "block" } }}
+              >
+                Log in
+              </Button>
+              <IconButton
+                onClick={showLoginScreen}
+                variant="contained"
+                color="inherit"
+                sx={{ display: { xs: "block", sm: "none" } }}
+              >
+                <AddIcon />
+              </IconButton>
+            </div>
+          ) : (
+            <div>
+              <Typography>Unsign</Typography>
+            </div>
+          )}
         </Toolbar>
       </AppBar>
     </div>

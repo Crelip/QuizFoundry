@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import { Add as AddIcon, Delete as DeleteIcon } from "@mui/icons-material";
 
-const QuizCreation = ({ quizID }) => {
+export default function QuizCreation({ quizID }) {
   const [finishedCreating, setFinishedCreating] = useState(false);
   const [lastQuestion, setLastQuestion] = useState(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -322,6 +322,4 @@ const QuizCreation = ({ quizID }) => {
       )}
     </div>
   );
-};
-
-export default QuizCreation;
+}

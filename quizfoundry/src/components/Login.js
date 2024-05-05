@@ -3,7 +3,7 @@ import AuthContext from "./context/AuthContext";
 import StartQuizCreation from "./StartQuizCreation";
 import { Grid, TextField, Button, Typography } from "@mui/material";
 
-const Login = ({ setQuizName }) => {
+export default function Login({ setHeader }) {
   const { user, loginUser } = useContext(AuthContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -47,14 +47,14 @@ const Login = ({ setQuizName }) => {
   };
 
   useEffect(() => {
-    if (!user) setQuizName("Login");
+    if (!user) setHeader("Login");
   });
 
   return (
     <div>
       {user ? (
         <div>
-          <StartQuizCreation userID={userID} setHeader={setQuizName} />
+          <StartQuizCreation userID={userID} setHeader={setHeader} />
         </div>
       ) : registeringUser ? (
         <div>
@@ -125,6 +125,4 @@ const Login = ({ setQuizName }) => {
       )}
     </div>
   );
-};
-
-export default Login;
+}

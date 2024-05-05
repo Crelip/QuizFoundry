@@ -8,7 +8,7 @@ import TextField from "@mui/material/TextField";
 import _ from "lodash";
 import { Typography } from "@mui/material";
 
-function QuizSolving({ initialQuestion, quizID }) {
+export default function QuizSolving({ initialQuestion, quizID }) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState([]);
   const [answeredQuestionsAmount, setAnsweredQuestionsAmount] = useState(0);
@@ -280,4 +280,3 @@ function QuizSolving({ initialQuestion, quizID }) {
     </div>
   );
 }
-export default QuizSolving;

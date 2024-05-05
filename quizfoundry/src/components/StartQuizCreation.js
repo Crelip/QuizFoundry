@@ -2,7 +2,7 @@ import { Grid, Button, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import QuizCreation from "./QuizCreation";
 
-const StartQuizCreation = ({ userID, setHeader }) => {
+export default function StartQuizCreation({ userID, setHeader }) {
   const [quizName, setQuizName] = useState("");
   const [isQuiz, setIsQuiz] = useState(false);
   const [quizID, setQuizID] = useState(0);
@@ -70,5 +70,4 @@ const StartQuizCreation = ({ userID, setHeader }) => {
       )}
     </div>
   );
-};
-export default StartQuizCreation;
+}
