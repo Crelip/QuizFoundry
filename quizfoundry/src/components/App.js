@@ -74,7 +74,11 @@ export default function App() {
           )}
           {currentView === "loginScreen" && (
             <AuthProvider>
-              <Login setHeader={setHeader} />
+              <Login
+                setHeader={setHeader}
+                currentUser={currentUser}
+                setCurrentUser={setCurrentUser}
+              />
             </AuthProvider>
           )}
         </Container>

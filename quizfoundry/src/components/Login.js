@@ -3,18 +3,17 @@ import AuthContext from "./context/AuthContext";
 import StartQuizCreation from "./StartQuizCreation";
 import { Grid, TextField, Button, Typography } from "@mui/material";
 
-export default function Login({ setHeader }) {
+export default function Login({ setHeader, currentUser, setCurrentUser }) {
   const { user, loginUser } = useContext(AuthContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [userID, setUserID] = useState(0);
   const [registeringUser, setRegisteringUser] = useState(false);
   const [registationStatus, setRegistrationStatus] = useState("");
 
   //Authentication
   const handleLogin = (e) => {
     e.preventDefault();
-    loginUser(username, password, setUserID);
+    loginUser(username, password, setCurrentUser);
   };
 
   //Registation
@@ -54,7 +53,7 @@ export default function Login({ setHeader }) {
     <div>
       {user ? (
         <div>
-          <StartQuizCreation userID={userID} setHeader={setHeader} />
+          <StartQuizCreation userID={currentUser} setHeader={setHeader} />
         </div>
       ) : registeringUser ? (
         <div>
