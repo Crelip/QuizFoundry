@@ -18,8 +18,10 @@ export default function Login({
   //Authentication
   const handleLogin = (e) => {
     e.preventDefault();
-    if (loginUser(username, password, setCurrentUser))
+    if (loginUser(username, password, setCurrentUser)) {
+      setHeader("QuizFoundry");
       setCurrentView("welcomeScreen");
+    }
   };
 
   //Registation

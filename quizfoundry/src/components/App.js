@@ -46,7 +46,7 @@ export default function App() {
       throw new Error("Failed to fetch search results.");
     setCurrentQuiz(quiz);
     startShowQuizSolving();
-    setQuizName(quiz.quizName);
+    setHeader(quiz.quizName);
     return quiz;
   };
 
@@ -80,6 +80,7 @@ export default function App() {
             <QuizSolving
               initialQuestion={currentQuiz.firstQuestion}
               quizID={currentQuiz.id}
+              userID={currentUser}
             />
           )}
           {currentView === "loginScreen" && (
