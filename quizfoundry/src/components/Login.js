@@ -8,6 +8,7 @@ export default function Login({
   currentUser,
   setCurrentUser,
   setCurrentView,
+  setCurrentUsername,
 }) {
   const { user, loginUser } = useContext(AuthContext);
   const [username, setUsername] = useState("");
@@ -21,6 +22,7 @@ export default function Login({
     if (loginUser(username, password, setCurrentUser)) {
       setHeader("QuizFoundry");
       setCurrentView("welcomeScreen");
+      setCurrentUsername(username);
     }
   };
 

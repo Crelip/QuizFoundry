@@ -9,12 +9,14 @@ import { createTheme } from "@mui/material";
 import { green } from "@mui/material/colors";
 import WelcomeScreen from "./WelcomeScreen";
 import StartQuizCreation from "./StartQuizCreation";
+import UserHistory from "./UserHistory";
 export default function App() {
   let { quizID } = useParams();
   const [currentView, setCurrentView] = useState("welcomeScreen");
   const [currentQuiz, setCurrentQuiz] = useState(null);
   const [header, setHeader] = useState("QuizFoundry");
   const [currentUser, setCurrentUser] = useState(-1);
+  const [currentUsername, setCurrentUsername] = useState("");
   const showLoginScreen = () => {
     setCurrentView("loginScreen");
   };
@@ -62,6 +64,10 @@ export default function App() {
     window.location.reload();
   };
 
+  const showUserHistory = () => {
+    setCurrentView("userHistory");
+  };
+
   useEffect(() => {
     if (quizID) {
       fetchSearchResult(quizID);
@@ -77,6 +83,8 @@ export default function App() {
           header={header}
           currentUser={currentUser}
           logOut={logOut}
+          showUserHistory={showUserHistory}
+          username={currentUsername}
         />
         <Container>
           {currentView === "welcomeScreen" && (
@@ -95,12 +103,16 @@ export default function App() {
                 setHeader={setHeader}
                 currentUser={currentUser}
                 setCurrentUser={setCurrentUser}
+                setCurrentUsername={setCurrentUsername}
                 setCurrentView={setCurrentView}
               />
             </AuthProvider>
           )}
-          {currentView == "quizCreation" && (
+          {currentView === "quizCreation" && (
             <StartQuizCreation userID={currentUser} setHeader={setHeader} />
+          )}
+          {currentView === "userHistory" && (
+            <UserHistory userID={currentUser} username={currentUsername} />
           )}
         </Container>
       </ThemeProvider>

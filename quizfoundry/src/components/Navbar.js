@@ -15,6 +15,8 @@ export default function Navbar({
   header,
   currentUser,
   logOut,
+  showUserHistory,
+  username,
 }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
@@ -90,6 +92,15 @@ export default function Navbar({
             </div>
           ) : (
             <div>
+              <Button
+                onClick={showUserHistory}
+                variant="contained"
+                color="inherit"
+                sx={{ display: { xs: "none", sm: "block" } }}
+              >
+                {username}
+              </Button>
+
               <Button
                 onClick={logOut}
                 variant="contained"
