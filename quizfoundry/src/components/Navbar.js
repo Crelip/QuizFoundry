@@ -38,6 +38,10 @@ export default function Navbar({
     }
   };
 
+  function truncate(str, maxLength) {
+    return str.length > maxLength ? str.slice(0, maxLength - 3) + "..." : str;
+  }
+
   return (
     <div style={{ paddingBottom: "10px" }}>
       <AppBar position="static">
@@ -99,7 +103,7 @@ export default function Navbar({
                 color="inherit"
                 sx={{ display: { xs: "none", sm: "block" }, mx: 1 }}
               >
-                {username}
+                {truncate(username, 15)}
               </Button>
               <IconButton
                 onClick={showUserHistory}
