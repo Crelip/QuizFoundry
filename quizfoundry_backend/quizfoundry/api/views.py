@@ -2,7 +2,8 @@ from rest_framework.viewsets import ModelViewSet, generics
 from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from ..models import User, Quiz, Question, ChoiceAnswers, CorrectAnswers, NextQuestion
+from django.db.models import F
+from ..models import User, Quiz, Question, ChoiceAnswers, CorrectAnswers, NextQuestion, Answer
 from .serializers import QuizSerializer, QuestionSerializer, ChoiceAnswersSerializer, CorrectAnswersSerializer, NextQuestionSerializer, UserRegistrationSerializer, AnswerSerializer, AnswerQuestionSerializer
 
 class QuizViewSet(ModelViewSet):
@@ -40,6 +41,14 @@ class NextQuestionListView(ListAPIView):
     def get_queryset(self):
         question_id = self.kwargs['questionID']
         return NextQuestion.objects.filter(questionID=question_id)
+    
+class UserHistoryListView(ListAPIView):
+    serializer_class = AnswerSerializer
+
+    def get_queryset(self):
+        user_id = self.kwargs['userID']
+        #We also need to add quiz names to each entry
+        return Answer.objects.filter(userID=user_id)
     
 class CreateQuizView(CreateAPIView):
     serializer_class = QuizSerializer
@@ -133,3 +142,4 @@ class AddAnswerQuestionView(CreateAPIView):
             serializer.save()
             return Response({}, status=201)
         return Response(serializer.errors, status=400)
+
