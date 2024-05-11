@@ -1,7 +1,7 @@
 from rest_framework.routers import DefaultRouter
 from quizfoundry.api.urls import quiz_router
 from django.urls import path, include
-from quizfoundry.api.views import QuizDetailView, QuestionDetailView, ChoiceAnswersListView, CorrectAnswersListView, NextQuestionListView, CreateQuizView, AddQuestionView, AddCorrectAnswerView, AddChoiceAnswerView, AddNextQuestionView, UpdateFirstQuestionOfAQuizView, UserRegistrationView, AddAnswerView, AddAnswerQuestionView, UserHistoryListView
+from quizfoundry.api.views import QuizDetailView, QuestionDetailView, ChoiceAnswersListView, CorrectAnswersListView, NextQuestionListView, CreateQuizView, AddQuestionView, AddCorrectAnswerView, AddChoiceAnswerView, AddNextQuestionView, UpdateFirstQuestionOfAQuizView, UserRegistrationView, AddAnswerView, AddAnswerQuestionView, UserHistoryListView, AnswerQuestionListView
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView
@@ -19,6 +19,7 @@ urlpatterns = [
     path('correct/<int:questionID>/', CorrectAnswersListView.as_view(), name='correct_detail'),
     path('next/<int:questionID>/', NextQuestionListView.as_view(), name='next_detail'),
     path('user_history/<int:userID>/', UserHistoryListView.as_view(), name='user_history'),
+    path('answer_question/<int:answerID>/', AnswerQuestionListView.as_view(), name='answer_question'),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('create_quiz/', CreateQuizView.as_view(), name='create_quiz'),
