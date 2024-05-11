@@ -7,14 +7,15 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import _ from "lodash";
 import { Typography } from "@mui/material";
+import QuestionCorrectness from "./QuestionCorrectness";
 
 export default function QuizSolving({ initialQuestion, quizID, userID }) {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState([]);
   const [answeredQuestionsAmount, setAnsweredQuestionsAmount] = useState(0);
   const [correctAnswersAmount, setCorrectAnswersAmount] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [currentChoices, setCurrentChoices] = useState(null);
+  const [questionResult, setQuestionResult] = useState("");
 
   async function fetchQuestion(questionId) {
     try {
@@ -93,13 +94,13 @@ export default function QuizSolving({ initialQuestion, quizID, userID }) {
     Promise.all([correctAnswersPromise, nextQuestionPromise])
       .then(([correctAnswers, nextQuestion]) => {
         const correctAnswersNormalised = correctAnswers.map((element) => {
-          console.log(element.correctAnswer);
           return _.lowerCase(_.deburr(element.correctAnswer));
         });
 
         if (correctAnswersNormalised.includes(answer)) {
           setCorrectAnswersAmount(correctAnswersAmount + 1);
           ans = true;
+          setQuestionResult("You answered correctly!");
         }
         setUserAnswers([
           ...userAnswers,
@@ -107,7 +108,6 @@ export default function QuizSolving({ initialQuestion, quizID, userID }) {
         ]);
         // Finding the next question (if no next question, it should be -1)
         if (nextQuestion.length === 0) {
-          setCurrentQuestionIndex(-1);
           setCurrentQuestion(null);
           finishQuiz([
             ...userAnswers,
@@ -130,6 +130,7 @@ export default function QuizSolving({ initialQuestion, quizID, userID }) {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
+    if (!ans) setQuestionResult("You answered incorrectly!");
     return ans;
   };
 
@@ -138,7 +139,6 @@ export default function QuizSolving({ initialQuestion, quizID, userID }) {
       setCurrentChoices(choices.map((choice) => choice.choiceAnswer));
     });
     fetchQuestion(nextQuestionID).then((nextQuestion) => {
-      setCurrentQuestionIndex(nextQuestion.nextQuestionID);
       setCurrentQuestion(nextQuestion);
     });
   };
@@ -152,7 +152,7 @@ export default function QuizSolving({ initialQuestion, quizID, userID }) {
   };
 
   const isCorrectAnswer = (choice, currentQuestion) => {
-    const isCorrect = handleAnswer(choice, currentQuestion);
+    return handleAnswer(choice, currentQuestion);
   };
 
   const finishQuiz = async (answers) => {
@@ -227,6 +227,7 @@ export default function QuizSolving({ initialQuestion, quizID, userID }) {
     <div>
       {currentQuestion && (
         <div>
+          <QuestionCorrectness text={questionResult} />
           <Typography variant="h4">
             Question {answeredQuestionsAmount + 1}
           </Typography>
