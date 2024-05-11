@@ -1,6 +1,5 @@
 import { Typography } from "@mui/material";
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function QuestionCorrectness({ text }) {
   const [isVisible, setIsVisible] = useState(false);
@@ -17,8 +16,8 @@ export default function QuestionCorrectness({ text }) {
   }, [text]);
 
   return (
-    <div>
-      <Typography>{isVisible && text}</Typography>
-    </div>
+    <Typography style={{ height: "20px", overflow: "hidden" }}>
+      {isVisible ? text : " "}
+    </Typography>
   );
 }

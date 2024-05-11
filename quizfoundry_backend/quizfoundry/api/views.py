@@ -48,7 +48,7 @@ class UserHistoryListView(ListAPIView):
     def get_queryset(self):
         user_id = self.kwargs['userID']
         #We also need to add quiz names to each entry
-        return Answer.objects.filter(userID=user_id)
+        return Answer.objects.filter(userID=user_id).order_by('-timeSubmitted')
     
 class CreateQuizView(CreateAPIView):
     serializer_class = QuizSerializer

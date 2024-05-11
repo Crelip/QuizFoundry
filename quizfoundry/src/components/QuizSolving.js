@@ -277,7 +277,10 @@ export default function QuizSolving({ initialQuestion, quizID, userID }) {
           <Typography>Correct answers: {correctAnswersAmount}</Typography>
           <Typography>
             Success rate:{" "}
-            {(correctAnswersAmount / answeredQuestionsAmount) * 100}%
+            {parseFloat(
+              (correctAnswersAmount / answeredQuestionsAmount) * 100
+            ).toFixed(2)}
+            %
           </Typography>
         </div>
       )}
