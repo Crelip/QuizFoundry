@@ -8,6 +8,7 @@ import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
+import PersonIcon from "@mui/icons-material/Person";
 
 export default function Navbar({
   showLoginScreen,
@@ -91,21 +92,28 @@ export default function Navbar({
               </IconButton>
             </div>
           ) : (
-            <div>
+            <div style={{ display: "flex" }}>
               <Button
                 onClick={showUserHistory}
                 variant="contained"
                 color="inherit"
-                sx={{ display: { xs: "none", sm: "block" } }}
+                sx={{ display: { xs: "none", sm: "block" }, mx: 1 }}
               >
                 {username}
               </Button>
-
+              <IconButton
+                onClick={showUserHistory}
+                variant="contained"
+                color="inherit"
+                sx={{ display: { xs: "block", sm: "none" } }}
+              >
+                <PersonIcon />
+              </IconButton>
               <Button
                 onClick={logOut}
                 variant="contained"
                 color="inherit"
-                sx={{ display: { xs: "none", sm: "block" } }}
+                sx={{ display: { xs: "none", sm: "block" }, mx: 1 }}
               >
                 Log out
               </Button>
