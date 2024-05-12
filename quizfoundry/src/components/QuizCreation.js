@@ -6,6 +6,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  ListItemIcon,
   IconButton,
   Dialog,
   DialogTitle,
@@ -13,6 +14,10 @@ import {
   DialogActions,
   Box,
   Grid,
+  Switch,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
 } from "@mui/material";
 import {
   Add as AddIcon,
@@ -27,8 +32,9 @@ export default function QuizCreation({ quizID }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [newQuestion, setNewQuestion] = useState("");
   const [newAnswers, setNewAnswers] = useState([""]);
-  const [newCorrectAnswers, setNewCorrectAnswers] = useState([""]);
+  const [newCorrectAnswers, setNewCorrectAnswers] = useState([]);
   const [questions, setQuestions] = useState([]);
+  const [isChoice, setIsChoice] = useState(false);
   const onAddQuestion = (newQuestion) => {
     setQuestions([...questions, newQuestion]);
   };
@@ -117,25 +123,27 @@ export default function QuizCreation({ quizID }) {
 
     //Setting the correct answers
     newCorrectAnswers.forEach(async (correctAnswer) => {
-      try {
-        const response = await fetch(
-          process.env.REACT_APP_API_URL + "add_correct_answer/",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              question: questionID,
-              correctAnswer: correctAnswer,
-            }),
+      if (newAnswers.includes(correctAnswer)) {
+        try {
+          const response = await fetch(
+            process.env.REACT_APP_API_URL + "add_correct_answer/",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                question: questionID,
+                correctAnswer: correctAnswer,
+              }),
+            }
+          );
+          if (response.ok) {
+            const data = await response.json();
           }
-        );
-        if (response.ok) {
-          const data = await response.json();
+        } catch (error) {
+          console.error("Error:", error);
         }
-      } catch (error) {
-        console.error("Error:", error);
       }
     });
 
@@ -259,9 +267,19 @@ export default function QuizCreation({ quizID }) {
   }
 
   //Need this function for now
-  async function removeAllQuestionsBefore(id) {
+  function removeAllQuestionsBefore(id) {
     const toRemove = questions.filter((question) => question.id < id);
     toRemove.forEach((question) => handleRemoveQuestion(question.id));
+  }
+
+  function handleToggleCorrectAnswer(index) {
+    if (newCorrectAnswers.includes(newAnswers[index]))
+      handleRemoveCorrectAnswer(newCorrectAnswers.indexOf(newAnswers[index]));
+    else handleAddNewCorrectAnswer(newAnswers[index]);
+  }
+
+  function handleAddNewCorrectAnswer(text) {
+    setNewCorrectAnswers([...newCorrectAnswers, text]);
   }
 
   return (
@@ -289,11 +307,6 @@ export default function QuizCreation({ quizID }) {
                   <Grid item xs={3} container justifyContent="flex-end">
                     <IconButton onClick={() => setAsFirstQuestion(question.id)}>
                       <LooksOneIcon />
-                    </IconButton>
-                    <IconButton
-                      onClick={() => handleRemoveQuestion(question.id)}
-                    >
-                      <DeleteIcon />
                     </IconButton>
                   </Grid>
                 </Grid>
@@ -326,6 +339,19 @@ export default function QuizCreation({ quizID }) {
           <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
             <DialogTitle>Add New Question</DialogTitle>
             <DialogContent>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={isChoice}
+                    onChange={() => {
+                      setIsChoice(!isChoice);
+                      setNewAnswers([""]);
+                      setNewCorrectAnswers([]);
+                    }}
+                  />
+                }
+                label="Is choice"
+              />
               <TextField
                 margin="normal"
                 label="Question Text"
@@ -333,50 +359,81 @@ export default function QuizCreation({ quizID }) {
                 value={newQuestion}
                 onChange={(e) => setNewQuestion(e.target.value)}
               />
-              {newAnswers.map((answer, index) => (
-                <div key={index}>
-                  <TextField
-                    margin="normal"
-                    label={`Answer ${index + 1}`}
-                    fullWidth
-                    value={answer}
-                    onChange={(e) => handleAnswerChange(index, e)}
-                  />
-                  {index > 0 && (
-                    <IconButton onClick={() => handleRemoveAnswer(index)}>
-                      <DeleteIcon />
-                    </IconButton>
-                  )}
+              {isChoice && (
+                <div>
+                  {newAnswers.map((answer, index) => (
+                    <div key={index}>
+                      <TextField
+                        margin="normal"
+                        label={`Answer ${index + 1}`}
+                        fullWidth
+                        value={answer}
+                        onChange={(e) => handleAnswerChange(index, e)}
+                      />
+                      {index > 0 && (
+                        <IconButton onClick={() => handleRemoveAnswer(index)}>
+                          <DeleteIcon />
+                        </IconButton>
+                      )}
+                    </div>
+                  ))}
+                  <Button color="primary" onClick={handleAddAnswer}>
+                    Add Answer
+                  </Button>
                 </div>
-              ))}
-              <Button color="primary" onClick={handleAddAnswer}>
-                Add Answer
-              </Button>
-              <Box sx={{ color: "text.secondary", fontSize: 8 }}>
-                Don't add answers if you don't want this to be a choice question
-              </Box>
+              )}
 
-              {newCorrectAnswers.map((correctAnswer, index) => (
-                <div key={index}>
-                  <TextField
-                    margin="normal"
-                    label={`Correct Answer ${index + 1}`}
-                    fullWidth
-                    value={correctAnswer}
-                    onChange={(e) => handleCorrectAnswerChange(index, e)}
-                  />
-                  {index > 0 && (
-                    <IconButton
-                      onClick={() => handleRemoveCorrectAnswer(index)}
+              <Typography variant="h6">Correct answers</Typography>
+
+              {isChoice ? (
+                <div>
+                  {newAnswers.map((answer, index) => (
+                    <ListItem
+                      key={index}
+                      dense
+                      onClick={() => handleToggleCorrectAnswer(index)}
                     >
-                      <DeleteIcon />
-                    </IconButton>
-                  )}
+                      <ListItemIcon>
+                        <Checkbox
+                          edge="start"
+                          checked={newCorrectAnswers.includes(answer)}
+                          tabIndex={-1}
+                          disableRipple
+                        />
+                      </ListItemIcon>
+                      <ListItemText primary={answer} />
+                    </ListItem>
+                  ))}
                 </div>
-              ))}
-              <Button color="primary" onClick={handleAddCorrectAnswer}>
-                Add A Correct Answer
-              </Button>
+              ) : (
+                <div>
+                  {newCorrectAnswers.map((correctAnswer, index) => (
+                    <div key={index}>
+                      <TextField
+                        margin="normal"
+                        label={`Correct Answer ${index + 1}`}
+                        fullWidth
+                        value={correctAnswer}
+                        onChange={(e) => handleCorrectAnswerChange(index, e)}
+                      />
+                      {index > 0 && (
+                        <IconButton
+                          onClick={() => handleRemoveCorrectAnswer(index)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+              {!isChoice && (
+                <div>
+                  <Button color="primary" onClick={handleAddCorrectAnswer}>
+                    Add A Correct Answer
+                  </Button>
+                </div>
+              )}
             </DialogContent>
             <DialogActions>
               <Button onClick={() => setIsDialogOpen(false)}>Cancel</Button>
