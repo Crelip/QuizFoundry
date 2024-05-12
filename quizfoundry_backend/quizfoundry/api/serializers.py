@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer
-from ..models import User, Quiz, Question, ChoiceAnswers, CorrectAnswers, NextQuestion, Answer, AnswerQuestion
+from ..models import Quiz, Question, ChoiceAnswers, CorrectAnswers, NextQuestion, Answer, AnswerQuestion
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
@@ -16,12 +16,12 @@ class UserSerializer(ModelSerializer):
 class ChoiceAnswersSerializer(ModelSerializer):
     class Meta:
         model = ChoiceAnswers
-        fields = ('questionID', 'choiceAnswer')
+        fields = '__all__'
 
 class CorrectAnswersSerializer(ModelSerializer):
     class Meta:
         model = CorrectAnswers
-        fields = ('questionID', 'correctAnswer')
+        fields = '__all__'
 
 class NextQuestionSerializer(ModelSerializer):
     class Meta:

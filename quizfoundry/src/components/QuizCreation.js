@@ -14,7 +14,11 @@ import {
   Box,
   Grid,
 } from "@mui/material";
-import { Add as AddIcon, Delete as DeleteIcon } from "@mui/icons-material";
+import {
+  Add as AddIcon,
+  Delete as DeleteIcon,
+  Edit as EditIcon,
+} from "@mui/icons-material";
 
 export default function QuizCreation({ quizID }) {
   const [finishedCreating, setFinishedCreating] = useState(false);
@@ -121,7 +125,7 @@ export default function QuizCreation({ quizID }) {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              questionID: questionID,
+              question: questionID,
               correctAnswer: correctAnswer,
             }),
           }
@@ -146,7 +150,7 @@ export default function QuizCreation({ quizID }) {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                questionID: questionID,
+                question: questionID,
                 choiceAnswer: answer,
               }),
             }
@@ -208,9 +212,22 @@ export default function QuizCreation({ quizID }) {
     setNewCorrectAnswers(updatedCorrectAnswers);
   };
 
-  const handleRemoveQuestion = (id) => {
+  async function handleRemoveQuestion(id) {
     onDeleteQuestion(id);
-  };
+    try {
+      const response = await fetch(
+        process.env.REACT_APP_API_URL + "remove_question/" + id + "/",
+        {
+          method: "DELETE",
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
 
   const finishQuizCreation = () => {
     setFinishedCreating(true);
@@ -228,12 +245,32 @@ export default function QuizCreation({ quizID }) {
       ) : (
         <div>
           <List>
-            {questions.map((question) => (
-              <ListItem key={question.id}>
-                <ListItemText primary={question.questionText} />
+            {questions.map((question, index) => (
+              <ListItem key={question.id} divider>
+                <Grid
+                  container
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Grid item xs={9}>
+                    <ListItemText primary={question.questionText} />
+                  </Grid>
+                  <Grid item xs={3} container justifyContent="flex-end">
+                    <IconButton onClick={() => handleEditQuestion(question.id)}>
+                      <EditIcon />{" "}
+                      {/* You should import EditIcon from @mui/icons-material */}
+                    </IconButton>
+                    <IconButton
+                      onClick={() => handleRemoveQuestion(question.id)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Grid>
+                </Grid>
               </ListItem>
             ))}
           </List>
+
           <Grid container direction="row" spacing={2}>
             <Grid item>
               <Button

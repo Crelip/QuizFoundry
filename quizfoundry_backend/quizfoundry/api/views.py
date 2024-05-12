@@ -1,9 +1,9 @@
 from rest_framework.viewsets import ModelViewSet, generics
-from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.db.models import F
-from ..models import User, Quiz, Question, ChoiceAnswers, CorrectAnswers, NextQuestion, Answer, AnswerQuestion
+from ..models import Quiz, Question, ChoiceAnswers, CorrectAnswers, NextQuestion, Answer, AnswerQuestion
 from .serializers import QuizSerializer, QuestionSerializer, ChoiceAnswersSerializer, CorrectAnswersSerializer, NextQuestionSerializer, UserRegistrationSerializer, AnswerSerializer, AnswerQuestionSerializer
 
 class QuizViewSet(ModelViewSet):
@@ -25,22 +25,22 @@ class ChoiceAnswersListView(ListAPIView):
     serializer_class = ChoiceAnswersSerializer
 
     def get_queryset(self):
-        question_id = self.kwargs['questionID']
-        return ChoiceAnswers.objects.filter(questionID=question_id)
+        questionID = self.kwargs['questionID']
+        return ChoiceAnswers.objects.filter(question_id=questionID)
 
 class CorrectAnswersListView(ListAPIView):
     serializer_class = CorrectAnswersSerializer
 
     def get_queryset(self):
-        question_id = self.kwargs['questionID']
-        return CorrectAnswers.objects.filter(questionID=question_id)
+        questionID = self.kwargs['questionID']
+        return CorrectAnswers.objects.filter(question_id=questionID)
 
 class NextQuestionListView(ListAPIView):
     serializer_class = NextQuestionSerializer
 
     def get_queryset(self):
-        question_id = self.kwargs['questionID']
-        return NextQuestion.objects.filter(questionID=question_id)
+        questionID = self.kwargs['questionID']
+        return NextQuestion.objects.filter(question_id=questionID)
     
 class UserHistoryListView(ListAPIView):
     serializer_class = AnswerSerializer
@@ -75,6 +75,13 @@ class AddQuestionView(CreateAPIView):
             question = serializer.save()
             return Response({'id': question.id}, status=201)
         return Response(serializer.errors, status=400)
+    
+class RemoveQuestionView(DestroyAPIView):
+    queryset = Question.objects.all()
+    serializer_class = QuestionSerializer
+    lookup_field = 'id'
+    def delete(self, request, *args, **kwargs):
+        return super().delete(request, *args, **kwargs)
     
 class AddCorrectAnswerView(CreateAPIView):
     serializer_class = CorrectAnswersSerializer

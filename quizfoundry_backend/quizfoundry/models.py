@@ -2,13 +2,6 @@ from django.db import models
 
 # Create your models here.
 
-class User(models.Model):
-    username = models.CharField(max_length=100, unique=True)
-    email = models.CharField(max_length=100)
-    password = models.CharField(max_length=100)
-    def __str__(self):
-        return self.username
-
 class Quiz(models.Model):
     id = models.AutoField(primary_key=True)
     quizName = models.CharField(max_length=100, unique=True)
@@ -19,26 +12,6 @@ class Quiz(models.Model):
         return Question.objects.filter(quizID = self.id)
     def __str__(self):
         return self.quizName
-
-class ChoiceAnswers(models.Model):
-    questionID = models.PositiveIntegerField()
-    choiceAnswer = models.CharField(max_length=100)
-    def __str__(self):
-        return str(self.questionID) + " " + self.choiceAnswer
-
-class CorrectAnswers(models.Model):
-    questionID = models.PositiveIntegerField()
-    correctAnswer = models.CharField(max_length=100)
-    def __str__(self):
-        return str(self.questionID) + " " + self.correctAnswer
-
-class NextQuestion(models.Model):
-    questionID = models.PositiveIntegerField()
-    answer = models.CharField(max_length=100)
-    nextQuestionID = models.PositiveIntegerField()
-    def __str__(self):
-        return str(self.questionID) + " " + self.answer + " " + str(self.nextQuestionID)
-
 
 class Question(models.Model):
     id = models.AutoField(primary_key=True)
@@ -51,6 +24,24 @@ class Question(models.Model):
         return ChoiceAnswers.objects.filter(questionID = self.id)
     def __str__(self):
         return self.questionText
+
+class CorrectAnswers(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    correctAnswer = models.CharField(max_length=100)
+    def __str__(self):
+        return str(self.question.id) + " " + self.correctAnswer
+    
+class ChoiceAnswers(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    choiceAnswer = models.CharField(max_length=100)
+    def __str__(self):
+        return str(self.question.id) + " " + self.choiceAnswer
+
+
+class NextQuestion(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='current_question')
+    answer = models.CharField(max_length=100)
+    nextQuestion = models.ForeignKey(Question, related_name='next_question', on_delete=models.CASCADE)
 
 class Answer(models.Model):
     quizID = models.PositiveIntegerField()
