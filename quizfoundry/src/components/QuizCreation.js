@@ -18,6 +18,7 @@ import {
   Add as AddIcon,
   Delete as DeleteIcon,
   Edit as EditIcon,
+  LooksOne as LooksOneIcon,
 } from "@mui/icons-material";
 
 export default function QuizCreation({ quizID }) {
@@ -233,6 +234,8 @@ export default function QuizCreation({ quizID }) {
     setFinishedCreating(true);
   };
 
+  async function setAsFirstQuestion(id) {}
+
   return (
     <div>
       {finishedCreating ? (
@@ -256,9 +259,8 @@ export default function QuizCreation({ quizID }) {
                     <ListItemText primary={question.questionText} />
                   </Grid>
                   <Grid item xs={3} container justifyContent="flex-end">
-                    <IconButton onClick={() => handleEditQuestion(question.id)}>
-                      <EditIcon />{" "}
-                      {/* You should import EditIcon from @mui/icons-material */}
+                    <IconButton onClick={() => setAsFirstQuestion(question.id)}>
+                      <LooksOneIcon />
                     </IconButton>
                     <IconButton
                       onClick={() => handleRemoveQuestion(question.id)}
