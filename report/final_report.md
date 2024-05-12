@@ -1,4 +1,4 @@
-# Beta report: beta_version
+# Final report: final_version
 
 ## Filip Hošták
 
