@@ -235,6 +235,7 @@ export default function QuizCreation({ quizID }) {
   };
 
   async function setAsFirstQuestion(id) {
+    removeAllQuestionsBefore(id);
     try {
       const response = await fetch(
         process.env.REACT_APP_API_URL + "update_first_question/",
@@ -255,6 +256,12 @@ export default function QuizCreation({ quizID }) {
     } catch (error) {
       console.error("Error:", error);
     }
+  }
+
+  //Need this function for now
+  async function removeAllQuestionsBefore(id) {
+    const toRemove = questions.filter((question) => question.id < id);
+    toRemove.forEach((question) => handleRemoveQuestion(question.id));
   }
 
   return (
