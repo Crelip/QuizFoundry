@@ -234,7 +234,28 @@ export default function QuizCreation({ quizID }) {
     setFinishedCreating(true);
   };
 
-  async function setAsFirstQuestion(id) {}
+  async function setAsFirstQuestion(id) {
+    try {
+      const response = await fetch(
+        process.env.REACT_APP_API_URL + "update_first_question/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            firstQuestion: id,
+            id: quizID,
+          }),
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
 
   return (
     <div>
