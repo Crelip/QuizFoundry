@@ -77,9 +77,9 @@ export default function QuizCreation({ quizID }) {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              questionID: lastQuestion,
+              question: lastQuestion,
               answer: "-",
-              nextQuestionID: questionID,
+              nextQuestion: questionID,
             }),
           }
         );

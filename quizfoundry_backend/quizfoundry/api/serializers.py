@@ -26,7 +26,7 @@ class CorrectAnswersSerializer(ModelSerializer):
 class NextQuestionSerializer(ModelSerializer):
     class Meta:
         model = NextQuestion
-        fields = ('questionID', 'answer', 'nextQuestionID')
+        fields = '__all__'
 
 class QuestionSerializer(ModelSerializer):
     class Meta:
