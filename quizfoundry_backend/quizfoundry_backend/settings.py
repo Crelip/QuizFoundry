@@ -9,10 +9,21 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 from datetime import timedelta
+from decouple import config
 
+ALLOWED_HOST = config('ALLOWED_HOST')
+DB_HOST = config('DB_HOST')
+DB_NAME = config('DB_NAME')
+DB_PASSWORD = config('DB_PASSWORD')
+DB_PORT = str(config('DB_PORT'))
+DB_USER = config('DB_USER')
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,7 +37,7 @@ SECRET_KEY = 'django-insecure-65xo(8uhra^sy#v=*$(@=)@kkvz(s+soxd_po6v=q%86+5j32k
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [ALLOWED_HOST]
 
 
 # Application definition
@@ -46,7 +57,7 @@ INSTALLED_APPS = [
     'quizfoundry'
 ]
 
-CORS_ALLOWED_ORIGINS = ['http://localhost:3000']
+CORS_ALLOW_ALL_ORIGINS = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -86,10 +97,11 @@ WSGI_APPLICATION = 'quizfoundry_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'quizfoundrydb',
-        'USER': 'testinguser',
-        'PASSWORD': 'testingPassword',
-        'HOST': 'localhost'
+        'NAME': DB_NAME,
+        'USER': DB_USER,
+        'PASSWORD': DB_PASSWORD,
+        'HOST': DB_HOST,
+	'PORT': DB_PORT
     }
 }
 
@@ -175,5 +187,4 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_LIFETIME": timedelta(minutes=5),
     "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
 }
-
 
